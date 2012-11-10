@@ -1,0 +1,83 @@
+[System]
+Name='caminhao-Rosane-2012-5-31-1-25-20.112'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=35
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='Posicao c'
+Range=[0 100]
+NumMFs=5
+MF1='esquerda':'trapmf',[0 0 15 30]
+MF2='centro-esquerda':'trapmf',[22 32 43 50]
+MF3='centro':'trapmf',[47 49 51 53]
+MF4='centro-direita':'trapmf',[50 57 68 78]
+MF5='direita':'trapmf',[70 85 100 100]
+
+[Input2]
+Name='Angulo c'
+Range=[-90 270]
+NumMFs=7
+MF1='11-horas':'trapmf',[-90 -90 -45 0]
+MF2='9-horas':'trimf',[-30 0 35]
+MF3='8-horas':'trimf',[30 60 88]
+MF4='6-horas':'trimf',[82 90 98]
+MF5='4-horas':'trimf',[92 120 150]
+MF6='3-horas':'trimf',[145 180 210]
+MF7='1-hora':'trapmf',[180 225 270 270]
+
+[Output1]
+Name='Angulo v'
+Range=[-30 30]
+NumMFs=7
+MF1='muito-esquerda':'trimf',[-30 -30 -15]
+MF2='esquerda':'trapmf',[-20 -16 -10 -6]
+MF3='centro-esquerda':'trimf',[-10 -3 -2]
+MF4='centro':'trimf',[-3 0 3]
+MF5='centro-direita':'trimf',[2 3 10]
+MF6='direita':'trapmf',[6 10 16 20]
+MF7='muito-direita':'trimf',[15 30 30]
+
+[Rules]
+1 1, 7 (1) : 1
+5 7, 1 (1) : 1
+1 2, 4 (1) : 1
+5 6, 4 (1) : 1
+1 3, 1 (1) : 1
+5 5, 7 (1) : 1
+1 4, 1 (1) : 1
+5 4, 7 (1) : 1
+1 5, 1 (1) : 1
+5 3, 7 (1) : 1
+1 6, 7 (1) : 1
+5 2, 1 (1) : 1
+1 7, 7 (1) : 1
+5 1, 1 (1) : 1
+2 1, 7 (1) : 1
+4 7, 1 (1) : 1
+2 2, 7 (1) : 1
+4 6, 1 (1) : 1
+2 3, 3 (1) : 1
+4 5, 5 (1) : 1
+2 4, 1 (1) : 1
+4 4, 7 (1) : 1
+2 5, 1 (1) : 1
+4 3, 7 (1) : 1
+2 6, 1 (1) : 1
+4 2, 7 (1) : 1
+2 7, 1 (1) : 1
+4 1, 7 (1) : 1
+3 1, 7 (1) : 1
+3 7, 1 (1) : 1
+3 2, 7 (1) : 1
+3 6, 1 (1) : 1
+3 3, 6 (1) : 1
+3 5, 2 (1) : 1
+3 4, 4 (1) : 1
