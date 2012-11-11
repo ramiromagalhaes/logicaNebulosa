@@ -1,21 +1,26 @@
-%
-%   Treina o Gradient
-%
 function fisGradient = gradient(dados, fisBLS, nMFs1, nMFs2)
+% Treinamento do sistema nebuloso do caminhão pelo método do gradiente.
+%   dados: matriz com a massa de dados que será usada para o treinamento.
+%          A primeira coluna deve conter as entradas referentes à posição;
+%          a segunda coluna deve conter as entradas referentes à direção;
+%          a terceira coluna deve conter as saídas do ângulo de giro do volante.
+%   fisBLS: descritor inicial do sistema nebuloso.
+%   nMFs1: numero de funcoes de inclusao para o parametro x.
+%   nMFs2: numero de funcoes de inclusao para o parametro direção.
 
 fisSaida = genfis1(dados, [nMFs1 nMFs2], 'gaussmf');
 
-%ajusta parametro iniciais do centro dos outputs para saida do BLS (parametro b)
-nMF = size(fisSaida.output.mf, 2);
-for indiceMF = 1:nMF
-    fisSaida.output.mf(indiceMF).params(3) = fisBLS.output.mf(indiceMF).params(3);
-end
+%copia o parametro 3 (média) das funções de inclusão de fisBLS para fisSaida.
+%nMF = size(fisSaida.output.mf, 2);
+%for indiceMF = 1:nMF
+%    fisSaida.output.mf(indiceMF).params(3) = fisBLS.output.mf(indiceMF).params(3);
+%end
 
 nEntradas = size(fisSaida.input, 2);
 
-%ajusta parametros iniciais sigma para 1
+%atribui 1 à variancia de todas as funções de inclusão das variáveis de entrada.
 %for entrada = 1:nEntradas
-    %pega MF da vari�vel de entrada
+    %pega MF da vari�vel de entrada
 %    vEntrada = fisSaida.input(entrada);
 %    nMF = size(vEntrada.mf, 2);
 
@@ -36,12 +41,12 @@ erroAntigo = 0;
 
 while m <= nDados
     
-    %calcula os valores de inclus�o
+    %calcula os valores de inclus�o
     mv = ones(nRegras, nDados);
     for dado = 1:nDados
         for regra = 1:nRegras      
             for entrada = 1:nEntradas
-                %pega MF da vari�vel de entrada
+                %pega MF da vari�vel de entrada
                 indiceMF = fisSaida.rule(regra).antecedent(entrada);
                 mf = fisSaida.input(entrada).mf(indiceMF);
 
@@ -75,7 +80,7 @@ while m <= nDados
         
         %ajusta parametros dos inputs
         for entrada = 1:nEntradas
-            %pega MF da vari�vel de entrada
+            %pega MF da vari�vel de entrada
             indiceMF = fisSaida.rule(r).antecedent(entrada);
             mf = fisSaida.input(entrada).mf(indiceMF);
 
