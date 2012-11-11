@@ -1,4 +1,4 @@
-function fisGradient = gradient(dados, fisBLS, nMFs1, nMFs2)
+function fisSaida = gradient(dados, nMFs1, nMFs2)
 % Treinamento do sistema nebuloso do caminhão pelo método do gradiente.
 %   dados: matriz com a massa de dados que será usada para o treinamento.
 %          A primeira coluna deve conter as entradas referentes à posição;
@@ -8,40 +8,18 @@ function fisGradient = gradient(dados, fisBLS, nMFs1, nMFs2)
 %   nMFs1: numero de funcoes de inclusao para o parametro x.
 %   nMFs2: numero de funcoes de inclusao para o parametro direção.
 
+nDados = size(dados, 1); %quantidade linhas do parametro dados
+y = dados(:, 3); %coluna de saidas da massa de dados
+
+% geracao inicial do FIS treinado pelo metodo do gradiente
 fisSaida = genfis1(dados, [nMFs1 nMFs2], 'gaussmf');
+nEntradas = size(fisSaida.input, 2); %quantidade de variáveis de entrada
+nRegras = size(fisSaida.rule, 2); %quantidade de regras do sistema
 
-%copia o parametro 3 (média) das funções de inclusão de fisBLS para fisSaida.
-%nMF = size(fisSaida.output.mf, 2);
-%for indiceMF = 1:nMF
-%    fisSaida.output.mf(indiceMF).params(3) = fisBLS.output.mf(indiceMF).params(3);
-%end
 
-nEntradas = size(fisSaida.input, 2);
+for m = 1:nDados
 
-%atribui 1 à variancia de todas as funções de inclusão das variáveis de entrada.
-%for entrada = 1:nEntradas
-    %pega MF da vari�vel de entrada
-%    vEntrada = fisSaida.input(entrada);
-%    nMF = size(vEntrada.mf, 2);
-
-    %Ajusta sigma para 1
-%    for indiceMF = 1:nMF
-%        fisSaida.input(entrada).mf(indiceMF).params(1) = 1;
-%    end
-%end
-
-nDados = size(dados, 1);
-nRegras = size(fisSaida.rule, 2);
-
-%pega outputs
-y = dados(:, size(dados, 2));
-
-m = 1;
-erroAntigo = 0;
-
-while m <= nDados
-    
-    %calcula os valores de inclus�o
+    %calcula os valores de inclusao
     mv = ones(nRegras, nDados);
     for dado = 1:nDados
         for regra = 1:nRegras      
@@ -56,7 +34,7 @@ while m <= nDados
             end
         end
     end
-      
+
     %calcula f(Xm)
     mvRegra = ones(nRegras, 1);
     bRegra = ones(nRegras, 1);
@@ -77,7 +55,7 @@ while m <= nDados
         %calcula novo centro de output (parametro b)
         novoB = bRegra(r) - erroM * mvRegra(r);
         fisSaida.output.mf(r).params(3) = novoB;
-        
+
         %ajusta parametros dos inputs
         for entrada = 1:nEntradas
             %pega MF da vari�vel de entrada
@@ -88,7 +66,7 @@ while m <= nDados
             sigmaAntigo = fisSaida.input(entrada).mf(indiceMF).params(1);
             centroAntigo = fisSaida.input(entrada).mf(indiceMF).params(2);
             xAntigo = dados(m, entrada);
-            
+
             novoCentro = centroAntigo - (erroM * (bRegra(r) - fXm)* mvRegra(r) * ((xAntigo - centroAntigo)/(sigmaAntigo^2)));            
             fisSaida.input(entrada).mf(indiceMF).params(2) = novoCentro;
 
@@ -97,8 +75,4 @@ while m <= nDados
             fisSaida.input(entrada).mf(indiceMF).params(1) = novoSigma;
         end
     end
-    
-    m = m + 1;
 end
-
-fisGradient = fisSaida;
