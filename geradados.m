@@ -5,7 +5,7 @@
 %
 % Parametros: quantidade de intervalos para cada vari�vel fuzzy
 function geradados(fisFilename)
-    if nargin < 3
+    if nargin < 1
         fisFilename = readfis('fis/caminhao-default.fis');
     end
 
