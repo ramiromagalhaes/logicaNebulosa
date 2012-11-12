@@ -13,7 +13,11 @@ function data = geradados(fisFileName, saveToFile)
     if nargin < 1
         fis = readfis('fis/caminhao-default.fis');
     else
-        fis = readfis(fisFileName);
+        if (strcmp(fisFileName,'default'))
+            fis = readfis('fis/caminhao-default.fis');
+        else
+            fis = readfis(fisFileName);
+        end
     end
 
     if nargin < 2

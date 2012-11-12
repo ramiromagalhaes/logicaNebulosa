@@ -9,27 +9,27 @@ function fisSaida = gradient(dados, nMFs1, nMFs2)
 %   nMFs2: numero de funcoes de inclusao para o parametro direção.
 
 nDados = size(dados, 1); %quantidade linhas do parametro dados
-y = dados(:, 3); %coluna de saidas da massa de dados
+y = dados(:, size(dados, 2)); %coluna de saidas da massa de dados do caminhao = coluna 3
 
 % geracao inicial do FIS treinado pelo metodo do gradiente
 fisSaida = genfis1(dados, [nMFs1 nMFs2], 'gaussmf');
-nEntradas = size(fisSaida.input, 2); %quantidade de variáveis de entrada
-nRegras = size(fisSaida.rule, 2); %quantidade de regras do sistema
+nEntradas = size(fisSaida.input, 2); %quantidade de variáveis de entrada = 2
+nRegras = size(fisSaida.rule, 2); %quantidade de regras do sistema = nMFs1 * nMFs2
+
 
 
 for m = 1:nDados
-
-    %calcula os valores de inclusao
+    %primeiro, calculamos os graus de inclusao de cada funcao de inclusao
+    %(mf - membership function) do sistema nebuloso, usando os dados que
+    %temos de exemplo.
     mv = ones(nRegras, nDados);
     for dado = 1:nDados
         for regra = 1:nRegras      
             for entrada = 1:nEntradas
-                %pega MF da vari�vel de entrada
-                indiceMF = fisSaida.rule(regra).antecedent(entrada);
-                mf = fisSaida.input(entrada).mf(indiceMF);
+                mf = getInputMFFromRules(regra, entrada);
 
                 %adicionar ao multiplicatorio do valor de inclusao
-                valor = feval(mf.type, dados(dado, entrada), mf.params);
+                valor = mfEval(mf, dados(dado, entrada));
                 mv(regra, dado) = mv(regra, dado) * valor;
             end
         end
@@ -58,21 +58,63 @@ for m = 1:nDados
 
         %ajusta parametros dos inputs
         for entrada = 1:nEntradas
-            %pega MF da vari�vel de entrada
-            indiceMF = fisSaida.rule(r).antecedent(entrada);
-            mf = fisSaida.input(entrada).mf(indiceMF);
+            %pega MF da variavel de entrada
+            mf = getInputMFFromRules(fis, r, entrada); %indiceMF = fisSaida.rule(r).antecedent(entrada);
+                                                       %mf = fisSaida.input(entrada).mf(indiceMF);
 
             %calcula novo centro de input (parametro c)
-            sigmaAntigo = fisSaida.input(entrada).mf(indiceMF).params(1);
-            centroAntigo = fisSaida.input(entrada).mf(indiceMF).params(2);
+            sigmaAntigo = getMFStdDeviation(mf);
+            centroAntigo = getMFMean(mf);
+
             xAntigo = dados(m, entrada);
 
             novoCentro = centroAntigo - (erroM * (bRegra(r) - fXm)* mvRegra(r) * ((xAntigo - centroAntigo)/(sigmaAntigo^2)));            
-            fisSaida.input(entrada).mf(indiceMF).params(2) = novoCentro;
+            setMFMean(mf, novoCentro);
 
             %calcula novo sigma
             novoSigma = sigmaAntigo - (erroM * (bRegra(r) - fXm)* mvRegra(r) * ((xAntigo - centroAntigo)/(sigmaAntigo^3)));            
-            fisSaida.input(entrada).mf(indiceMF).params(1) = novoSigma;
+            setMFStdDeviation(mf, novoSigma);
         end
     end
+end
+
+end
+
+
+
+%-------------------------
+% Funções auxiliares
+%-------------------------
+
+
+
+function mf = getInputMF(fis, inputIndex, mfIndex)
+    mf = fis.input(inputIndex).mf(mfIndex);
+end
+
+function mf = getInputMFFromRules(fis, ruleIndex, inputIndex)
+    %TODO what to do when there is no MF in the informed ruleIndex and inputIndex?
+    mfIndex = fisSaida.rule(ruleIndex).antecedent(inputIndex);
+    mf = getInputMF(fis, inputIndex, mfIndex);
+end
+
+% http://www.mathworks.com/help/fuzzy/gaussmf.html
+function mean = getMFMean(mf)
+    mean = mf.params(2);
+end
+
+function std = getMFStdDeviation(mf)
+    std = mf.params(1);
+end
+
+function setMFMean(mf, value)
+   mf.params(2) = value;
+end
+
+function setInputMFStdDeviation(mf, value)
+   mf.params(1) = value;
+end
+
+function v = mfEval(mf, input)
+    v = feval(mf.type, input, mf.params);
 end
