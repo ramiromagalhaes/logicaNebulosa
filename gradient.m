@@ -61,7 +61,7 @@ for m = 1:nDados
     epsilon = fXm - y(m);
     erro = 0.5 * (epsilon)^2;
 
-    %ajusta parametro
+    %Atualizacao dos parametros de todas as funcoes de todas as regras
     for r = 1:nRegras
         %calcula novo centro de output (parametro b)
         novoB = b(r) - epsilon * mvRegra(r);
@@ -84,7 +84,7 @@ for m = 1:nDados
 
             %calcula novo sigma
             novoSigma = sigmaAntigo - (epsilon * (b(r) - fXm)* mvRegra(r) * ((xAntigo - centroAntigo)/(sigmaAntigo^3)));            
-            setMFStdDeviation(mf, novoSigma);
+            setInputMFStdDeviation(mf, novoSigma);
         end
     end
 end
@@ -99,25 +99,28 @@ end
 
 
 
-function output = evalInputMFFromRules(fis, ruleIndex, inputIndex, input)
-    mf = getInputMFFromRules(fis, ruleIndex, inputIndex);
-    output = mfEval(mf, input);
+function mf = getInputMFFromRules(fis, ruleIndex, inputIndex)
+    mfIndex = fisSaida.rule(ruleIndex).antecedent(inputIndex);
+    mf = getInputMF(fis, inputIndex, mfIndex);
 end
 
 function mf = getInputMF(fis, inputIndex, mfIndex)
     mf = fis.input(inputIndex).mf(mfIndex);
 end
 
-function mf = getInputMFFromRules(fis, ruleIndex, inputIndex)
-    mfIndex = fisSaida.rule(ruleIndex).antecedent(inputIndex);
-    mf = getInputMF(fis, inputIndex, mfIndex);
-end
-
 function b = getOutputValueFromRules(fis, ruleIndex)
     b = fis.output.mf(ruleIndex).params(3);
 end
 
-% http://www.mathworks.com/help/fuzzy/gaussmf.html
+function output = evalInputMFFromRules(fis, ruleIndex, inputIndex, input)
+    mf = getInputMFFromRules(fis, ruleIndex, inputIndex);
+    output = mfEval(mf, input);
+end
+
+function output = mfEval(mf, input)
+    output = feval(mf.type, input, mf.params);
+end
+
 function mean = getMFMean(mf)
     mean = mf.params(2);
 end
@@ -132,8 +135,4 @@ end
 
 function setInputMFStdDeviation(mf, value)
    mf.params(1) = value;
-end
-
-function output = mfEval(mf, input)
-    output = feval(mf.type, input, mf.params);
 end
