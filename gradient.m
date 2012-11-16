@@ -45,7 +45,7 @@ b = zeros(nRegras, 1);
 
 %Este laco inicia a matriz b. Ela sera usada e atualizada no laco principal.
 for r = 1:nRegras
-    b(r) = getConsequentValueFromRules(fis, r);
+    b(r) = fis.output.mf(r).params(3);
 end
 
 
@@ -67,7 +67,13 @@ for m = 1:nDados
         %Esse e o laco da multiplicatoria das funcoes de inclusao presentes
         %na regra 'r', usando a tupla de dados 'm'.
         for e = 1:nEntradas
-            mv(r) = mv(r) * evalAntecedentMFFromRules(fis, r, e, dados(m, e));
+            %Preparando para chamar a funcao de inclusao
+            mfIndex = fis.rule(ruleIndex).antecedent(inputIndex);
+            mf = fis.input(inputIndex).mf(mfIndex);
+
+            %Chamando a funcao de inclusao e incluindo na multiplicatoria
+            output = feval(mf.type, dados(m, e), mf.params);
+            mv(r) = mv(r) * output;
         end
     end
 
@@ -98,14 +104,14 @@ for m = 1:nDados
         %serao usados para o calculo dos antecedentes. Somente os valores
         %antigos do consequente sao relevantes.
         for e = 1:nEntradas
-            %Obtem da regra 'r' a funcao de inclusao pertencente aos
-            %antecedentes de indice 'e'.
-            mf = getAntecedentMFFromRules(fis, r, e);
+            %Isso permite identificar a MF de uma regra do sistema nebuloso
+            %que desejamos atualizar.
+            mfIndex = fis.rule(r).antecedent(e);
 
             %Calcula os novos parametros da funcao de inclusao antecedente
             %que acabamos de obter.
-            centroAntigo = getMFMean(mf);
-            sigmaAntigo = getMFStdDeviation(mf);
+            sigmaAntigo = fis.input(e).mf(mfIndex).params(1);
+            centroAntigo = fis.input(e).mf(mfIndex).params(2);
 
             entradaIteracao = dados(m, e); %a entrada que vou usar agora
 
@@ -117,58 +123,14 @@ for m = 1:nDados
             novoSigma = sigmaAntigo - lambdaSigma * epsilon * (b(r) - fXm) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
 
             %Atribuicao dos novos parametros das funcoes.
-            setMFMean(fis, r, e, novoCentro);
-            setMFStdDeviation(fis, r, e, novoSigma);
+            fis.input(e).mf(mfIndex).params(1) = novoSigma;
+            fis.input(e).mf(mfIndex).params(2) = novoCentro;
         end
 
         %Enfim, calculamos o parametro dos consequentes.
         b(r) = b(r) - lambdaB * epsilon * mvRegra(r);
-        setConsequentParameterFromRules(fis, r, b(r));
+        fis.output.mf(r).params(3) = b(r);
     end
 end
 
-end
-
-
-
-%-------------------------
-% Funções auxiliares
-%-------------------------
-
-
-
-function mf = getAntecedentMFFromRules(fis, ruleIndex, inputIndex)
-    mfIndex = fis.rule(ruleIndex).antecedent(inputIndex);
-    mf = fis.input(inputIndex).mf(mfIndex);
-end
-
-function b = getConsequentValueFromRules(fis, ruleIndex)
-    b = fis.output.mf(ruleIndex).params(3);
-end
-
-function output = evalAntecedentMFFromRules(fis, ruleIndex, inputIndex, input)
-    mf = getAntecedentMFFromRules(fis, ruleIndex, inputIndex);
-    output = feval(mf.type, input, mf.params);
-end
-
-function mean = getMFMean(mf)
-    mean = mf.params(2);
-end
-
-function std = getMFStdDeviation(mf)
-    std = mf.params(1);
-end
-
-function setMFMean(fis, ruleIndex, inputIndex, value)
-    mfIndex = fis.rule(ruleIndex).antecedent(inputIndex);
-    fis.input(inputIndex).mf(mfIndex).params(2) = value;
-end
-
-function setMFStdDeviation(fis, ruleIndex, inputIndex, value)
-    mfIndex = fis.rule(ruleIndex).antecedent(inputIndex);
-    fis.input(inputIndex).mf(mfIndex).params(1) = value;
-end
-
-function setConsequentParameterFromRules(fis, ruleIndex, param)
-    fis.output.mf(ruleIndex).params(3) = param;
 end
