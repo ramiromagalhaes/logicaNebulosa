@@ -2,11 +2,11 @@ function fis = gradient(dados, nMFs1, nMFs2)
 % Treinamento do sistema nebuloso do caminhão pelo método do gradiente. Ao
 % longo dessa funcao, referenciaremos equacoes da 3a. edicao do livro Fuzzy
 % Logic with Engineering Applications.
+%   Os parametros dessa funcao sao os seguintes:
 %   dados: matriz com a massa de dados que será usada para o treinamento.
 %          A primeira coluna deve conter as entradas referentes à posição;
 %          a segunda coluna deve conter as entradas referentes à direção;
 %          a terceira coluna deve conter as saídas do ângulo de giro do volante.
-%   fisBLS: descritor inicial do sistema nebuloso.
 %   nMFs1: numero de funcoes de inclusao para o parametro x.
 %   nMFs2: numero de funcoes de inclusao para o parametro direção.
 
@@ -18,11 +18,11 @@ fis = genfis1(dados, [nMFs1 nMFs2], 'gaussmf');
 nEntradas = size(fis.input, 2); %quantidade de variáveis de entrada = 2
 nRegras = size(fis.rule, 2); %quantidade de regras do sistema = nMFs1 * nMFs2
 
+%Os lambdas sao parametros que determinam o tamanho do passo que o
+%algoritmo dara ao atualizar um valor.
 lambdaB = 1;
 lambdaC = 1;
 lambdaSigma = 1;
-
-
 
 %Contera as saidas do sistema nebuloso para cada uma de suas regras. Essa
 %matriz nao e realmente necessaria, visto que suas informacoes podem ser
