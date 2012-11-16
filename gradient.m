@@ -39,38 +39,35 @@ end
 
 
 for m = 1:nDados
-    %A célula (i, j) dessa matriz contem o resultado da multiplicacao de todas
-    %as funcoes de inclusao pertencentes a i-esima regra usando a j-esima tupla
-    %de dados.
-    mv = ones(nRegras, nDados);
+    %A célula (i) desse vetor contem o resultado da multiplicacao de todas
+    %as funcoes de inclusao pertencentes a i-esima regra.
+    mv = ones(nRegras, 1);
 
-    %Esses lacos povoam a matriz mv. O calculo apresentado aqui corresponde
-    %a equacao 7.14 do livro.
-    for d = 1:nDados
-        for r = 1:nRegras
-            %Esse e o laco da multiplicatoria das funcoes pertinentes a uma
-            %regra, com um conjunto de dados.
-            for e = 1:nEntradas
-                valor = evalAntecedentMFFromRules(fis, r, e, dados(d, e));
-                mv(r, d) = mv(r, d) * valor; %como iniciamos mv com 1, podemos iterar dessa forma desde o inicio.
-            end
+    %Esses lacos povoam mv. O calculo apresentado aqui corresponde a
+    %equacao 7.14 do livro. Contudo, note que não precisamos calcular o
+    %resultado de todas as regras com todas as tuplas de dados (conforme o
+    %livro sugere), pois não usaremos isso para nada.
+    for r = 1:nRegras
+        %Esse e o laco da multiplicatoria das funcoes de inclusao presentes
+        %na regra 'r', usando a tupla de dados 'm'.
+        for e = 1:nEntradas
+            mv(r) = mv(r) * evalAntecedentMFFromRules(fis, r, e, dados(m, e));
         end
     end
 
 
-
-    dividendo = sum(mv(:,m)); %esse somatorio sera usado varias vezes
+    dividendo = sum(mv); %esse somatorio sera usado varias vezes
 
     %Vetor que contem os resultados das multiplicacoes das funcoes de
     %inclusao existentes em uma regra usando como entrada a tupla de dados
     %sobre a qual estamos iterando agora.
-    mvRegra = mv(:, m) / dividendo;
+    mvRegra = mv / dividendo;
 
     %Contem os resultados do sistema nebuloso com a entrada m. Vide a
     %equacao 7.3 do livro.
     %Note que a reproducao da equacao 7.3 na pagina 224 esta incorreta,
     %pois a multiplicatoria do divisor vai de j = 1 a n, ao inves de R.
-    fXm = sum(mv(:, m) .* b) / dividendo;
+    fXm = sum(mv .* b) / dividendo;
 
     %Calculo de ε (epsilon), conforme definido pela equacao 7.15 do livro
     epsilon = fXm - y(m);
