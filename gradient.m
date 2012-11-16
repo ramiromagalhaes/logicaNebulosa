@@ -1,4 +1,4 @@
-function fis = gradient(dados, nMFs1, nMFs2)
+function [fis erros] = gradient(dados, nMFs1, nMFs2, progress)
 % Treinamento do sistema nebuloso do caminhão pelo método do gradiente. Ao
 % longo dessa funcao, referenciaremos equacoes da 3a. edicao do livro Fuzzy
 % Logic with Engineering Applications.
@@ -9,6 +9,15 @@ function fis = gradient(dados, nMFs1, nMFs2)
 %          a terceira coluna deve conter as saídas do ângulo de giro do volante.
 %   nMFs1: numero de funcoes de inclusao para o parametro x.
 %   nMFs2: numero de funcoes de inclusao para o parametro direção.
+%   progress: referencia para uma barra de progresso, para medir o avanco
+%             do algoritmo. Esse argumento e opcional. Note que esta funcao
+%             apenas atualiza a posicao da barra. Cabe ao chamador
+%             instancia-la e fecha-la.
+
+show_progress = false;
+if (nargin >= 4)
+    show_progress = true;
+end
 
 nDados = size(dados, 1); %quantidade linhas do parametro dados
 y = dados(:, size(dados, 2)); %coluna de saidas da massa de dados do caminhao = coluna 3
@@ -23,6 +32,9 @@ nRegras = size(fis.rule, 2); %quantidade de regras do sistema = nMFs1 * nMFs2
 lambdaB = 1;
 lambdaC = 1;
 lambdaSigma = 1;
+
+%Vetor de erros a medida que as iteracoes progridem
+erros = zeros(nDados, 1);
 
 %Contera as saidas do sistema nebuloso para cada uma de suas regras. Essa
 %matriz nao e realmente necessaria, visto que suas informacoes podem ser
@@ -39,6 +51,10 @@ end
 
 
 for m = 1:nDados
+    if (show_progress)
+        waitbar(m/nDados, progress);
+    end
+
     %A célula (i) desse vetor contem o resultado da multiplicacao de todas
     %as funcoes de inclusao pertencentes a i-esima regra.
     mv = ones(nRegras, 1);
@@ -72,7 +88,8 @@ for m = 1:nDados
     %Calculo de ε (epsilon), conforme definido pela equacao 7.15 do livro
     epsilon = fXm - y(m);
 
-    %erro = 0.5 * (epsilon)^2; %isso nao e usado...
+    %Registra o erro atual
+    erros(m) = 0.5 * (epsilon)^2;
 
     %Atualizacao dos parametros de todas as funcoes de todas as regras
     for r = 1:nRegras
@@ -100,8 +117,8 @@ for m = 1:nDados
             novoSigma = sigmaAntigo - lambdaSigma * epsilon * (b(r) - fXm) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
 
             %Atribuicao dos novos parametros das funcoes.
-            setMFMean(mf, novoCentro);
-            setMFStdDeviation(mf, novoSigma);
+            setMFMean(fis, r, e, novoCentro);
+            setMFStdDeviation(fis, r, e, novoSigma);
         end
 
         %Enfim, calculamos o parametro dos consequentes.
@@ -122,10 +139,6 @@ end
 
 function mf = getAntecedentMFFromRules(fis, ruleIndex, inputIndex)
     mfIndex = fis.rule(ruleIndex).antecedent(inputIndex);
-    mf = getAntecedentMF(fis, inputIndex, mfIndex);
-end
-
-function mf = getAntecedentMF(fis, inputIndex, mfIndex)
     mf = fis.input(inputIndex).mf(mfIndex);
 end
 
@@ -135,10 +148,6 @@ end
 
 function output = evalAntecedentMFFromRules(fis, ruleIndex, inputIndex, input)
     mf = getAntecedentMFFromRules(fis, ruleIndex, inputIndex);
-    output = mfEval(mf, input);
-end
-
-function output = mfEval(mf, input)
     output = feval(mf.type, input, mf.params);
 end
 
@@ -150,12 +159,14 @@ function std = getMFStdDeviation(mf)
     std = mf.params(1);
 end
 
-function setMFMean(mf, value)
-   mf.params(2) = value;
+function setMFMean(fis, ruleIndex, inputIndex, value)
+    mfIndex = fis.rule(ruleIndex).antecedent(inputIndex);
+    fis.input(inputIndex).mf(mfIndex).params(2) = value;
 end
 
-function setMFStdDeviation(mf, value)
-   mf.params(1) = value;
+function setMFStdDeviation(fis, ruleIndex, inputIndex, value)
+    mfIndex = fis.rule(ruleIndex).antecedent(inputIndex);
+    fis.input(inputIndex).mf(mfIndex).params(1) = value;
 end
 
 function setConsequentParameterFromRules(fis, ruleIndex, param)
