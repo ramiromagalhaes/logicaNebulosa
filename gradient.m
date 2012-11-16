@@ -68,8 +68,8 @@ for m = 1:nDados
         %na regra 'r', usando a tupla de dados 'm'.
         for e = 1:nEntradas
             %Preparando para chamar a funcao de inclusao
-            mfIndex = fis.rule(ruleIndex).antecedent(inputIndex);
-            mf = fis.input(inputIndex).mf(mfIndex);
+            mfIndex = fis.rule(r).antecedent(e);
+            mf = fis.input(e).mf(mfIndex);
 
             %Chamando a funcao de inclusao e incluindo na multiplicatoria
             output = feval(mf.type, dados(m, e), mf.params);
