@@ -87,6 +87,8 @@ for m = 1:nDados
     %Note que a reproducao da equacao 7.3 na pagina 224 esta incorreta,
     %pois a multiplicatoria do divisor vai de j = 1 a n, ao inves de R.
     defuzz = sum(mv .* b) / dividendo;
+    %Por que não usar evalfis???
+    %defuzz = evalfis(dados(m, 1:2), fis);
 
 
 
