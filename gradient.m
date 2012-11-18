@@ -1,4 +1,4 @@
-function [fis errosIteracao] = gradient(dados, nMFs1, nMFs2, progress)
+function [fis erros] = gradient(dados, nMFs1, nMFs2, progress)
 % Treinamento do sistema nebuloso do caminhão pelo método do gradiente. Ao
 % longo dessa funcao, referenciaremos equacoes da 3a. edicao do livro Fuzzy
 % Logic with Engineering Applications.
@@ -34,7 +34,7 @@ lambdaC = 1;
 lambdaSigma = 1;
 
 %Vetor de erros a medida que as iteracoes progridem
-errosIteracao = zeros(nDados, 1);
+erros = zeros(nDados, 1);
 
 %Matriz de parametros das funcoes de entrada
 sigmaC = mfParamsMatrix(fis);
@@ -92,7 +92,7 @@ for m = 1:nDados
     epsilon = defuzz - y(m);
 
     %Registra o erro atual
-    errosIteracao(m) = 0.5 * (epsilon)^2;
+    erros(m) = 0.5 * (epsilon)^2;
 
 
 
