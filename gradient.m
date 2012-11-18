@@ -54,8 +54,9 @@ for m = 1:nDados
         waitbar(m/nDados, progress);
     end
 
-    %A célula (i) desse vetor contem o resultado da multiplicacao de todas
-    %as funcoes de inclusao pertencentes a i-esima regra.
+    %mv(i) contem o resultado da multiplicacao de todas as funcoes de
+    %inclusao pertencentes a i-esima regra, usando como entrada os dados da
+    %iteracao 'm'.
     mv = ones(nRegras, 1);
 
     %Esses lacos povoam mv. O calculo apresentado aqui corresponde a
@@ -76,24 +77,28 @@ for m = 1:nDados
     end
 
 
+
     dividendo = sum(mv); %esse somatorio sera usado varias vezes
 
-    %Vetor que contem os resultados das multiplicacoes das funcoes de
-    %inclusao existentes em uma regra usando como entrada a tupla de dados
-    %sobre a qual estamos iterando agora.
-    mvRegra = mv / dividendo;
-
-    %Contem os resultados do sistema nebuloso com a entrada m. Vide a
-    %equacao 7.3 do livro.
+    %A equacao abaixo e a defuzificacao. Contem os resultados do sistema
+    %nebuloso com a entrada m. Vide a equacao 7.3 do livro (pag 214).
     %Note que a reproducao da equacao 7.3 na pagina 224 esta incorreta,
     %pois a multiplicatoria do divisor vai de j = 1 a n, ao inves de R.
-    fXm = sum(mv .* b) / dividendo;
+    defuzz = sum(mv .* b) / dividendo;
+
+
 
     %Calculo de ε (epsilon), conforme definido pela equacao 7.15 do livro
-    epsilon = fXm - y(m);
+    epsilon = defuzz - y(m);
 
     %Registra o erro atual
     errosIteracao(m) = 0.5 * (epsilon)^2;
+
+
+
+    %Este vetor sera utilizado multiplas vezes dentro do laco abaixo. Por
+    %isso o deixamos precalculado.
+    mvRegra = mv / dividendo;
 
     %Atualizacao dos parametros de todas as funcoes de todas as regras
     for r = 1:nRegras
@@ -109,11 +114,11 @@ for m = 1:nDados
             entradaIteracao = dados(m, e); %a entrada que vou usar agora
 
             %Equacao 7.17 do livro
-            novoCentro = centroAntigo - lambdaC * epsilon * (b(r) - fXm) * mvRegra(r) * ((entradaIteracao - centroAntigo)/(sigmaAntigo^2));
+            novoCentro = centroAntigo - lambdaC * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)/(sigmaAntigo^2));
 
             %Equacao 7.18 do livro
             %Aqui estava faltando elevar (entradaIteracao - centroAntigo) ao quadrado
-            novoSigma = sigmaAntigo - lambdaSigma * epsilon * (b(r) - fXm) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
+            novoSigma = sigmaAntigo - lambdaSigma * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
 
             %Atribuicao dos novos parametros das funcoes.
             sigmaC(r, e, 1) = novoSigma;
