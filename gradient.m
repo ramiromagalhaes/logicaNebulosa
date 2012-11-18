@@ -1,4 +1,4 @@
-function [fis erros] = gradient(dados, nMFs1, nMFs2, progress)
+function [fis errosIteracao] = gradient(dados, nMFs1, nMFs2, progress)
 % Treinamento do sistema nebuloso do caminhão pelo método do gradiente. Ao
 % longo dessa funcao, referenciaremos equacoes da 3a. edicao do livro Fuzzy
 % Logic with Engineering Applications.
@@ -34,13 +34,12 @@ lambdaC = 1;
 lambdaSigma = 1;
 
 %Vetor de erros a medida que as iteracoes progridem
-erros = zeros(nDados, 1);
+errosIteracao = zeros(nDados, 1);
 
-%Contera as saidas do sistema nebuloso para cada uma de suas regras. Essa
-%matriz nao e realmente necessaria, visto que suas informacoes podem ser
-%obtidas diretamente do FIS, mas ela e uma forma conveniente de fazermos
-%alguns calculos. Se for necessario reduzir o uso de memoria, basta alterar
-%o codigo para ler e usar os dados do FIS.
+%Matriz de parametros das funcoes de entrada
+sigmaC = mfParamsMatrix(fis);
+
+%Contera as saidas do sistema nebuloso para cada uma de suas regras.
 b = zeros(nRegras, 1);
 
 %Este laco inicia a matriz b. Ela sera usada e atualizada no laco principal.
@@ -51,7 +50,7 @@ end
 
 
 for m = 1:nDados
-    if (show_progress)
+    if (show_progress) %Atualiza o contador de progresso.
         waitbar(m/nDados, progress);
     end
 
@@ -67,13 +66,12 @@ for m = 1:nDados
         %Esse e o laco da multiplicatoria das funcoes de inclusao presentes
         %na regra 'r', usando a tupla de dados 'm'.
         for e = 1:nEntradas
-            %Preparando para chamar a funcao de inclusao
-            mfIndex = fis.rule(r).antecedent(e);
-            mf = fis.input(e).mf(mfIndex);
+            %Obtendo os parametros da funcao de inclusao que vamos incluir
+            %na multiplicatoria.
+            params = sigmaC(r, e, :);
 
             %Chamando a funcao de inclusao e incluindo na multiplicatoria
-            output = feval(mf.type, dados(m, e), mf.params);
-            mv(r) = mv(r) * output;
+            mv(r) = mv(r) * gaussmf(dados(m, e), params);
         end
     end
 
@@ -95,7 +93,7 @@ for m = 1:nDados
     epsilon = fXm - y(m);
 
     %Registra o erro atual
-    erros(m) = 0.5 * (epsilon)^2;
+    errosIteracao(m) = 0.5 * (epsilon)^2;
 
     %Atualizacao dos parametros de todas as funcoes de todas as regras
     for r = 1:nRegras
@@ -104,14 +102,9 @@ for m = 1:nDados
         %serao usados para o calculo dos antecedentes. Somente os valores
         %antigos do consequente sao relevantes.
         for e = 1:nEntradas
-            %Isso permite identificar a MF de uma regra do sistema nebuloso
-            %que desejamos atualizar.
-            mfIndex = fis.rule(r).antecedent(e);
-
-            %Calcula os novos parametros da funcao de inclusao antecedente
-            %que acabamos de obter.
-            sigmaAntigo = fis.input(e).mf(mfIndex).params(1);
-            centroAntigo = fis.input(e).mf(mfIndex).params(2);
+            %Obtencao dos parametros antigos
+            sigmaAntigo = sigmaC(r, e, 1);
+            centroAntigo = sigmaC(r, e, 2);
 
             entradaIteracao = dados(m, e); %a entrada que vou usar agora
 
@@ -123,14 +116,16 @@ for m = 1:nDados
             novoSigma = sigmaAntigo - lambdaSigma * epsilon * (b(r) - fXm) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
 
             %Atribuicao dos novos parametros das funcoes.
-            fis.input(e).mf(mfIndex).params(1) = novoSigma;
-            fis.input(e).mf(mfIndex).params(2) = novoCentro;
+            sigmaC(r, e, 1) = novoSigma;
+            sigmaC(r, e, 2) = novoCentro;
         end
 
         %Enfim, calculamos o parametro dos consequentes.
         b(r) = b(r) - lambdaB * epsilon * mvRegra(r);
-        fis.output.mf(r).params(3) = b(r);
     end
 end
+
+%Agora atualizamos o FIS para retorna-lo de acordo com os parametros otimos
+fis = fisFromMatrix(sigmaC, b);
 
 end
