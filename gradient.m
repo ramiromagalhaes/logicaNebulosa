@@ -138,7 +138,4 @@ for m = 1:nDados
     end
 end
 
-%Agora atualizamos o FIS para retorna-lo de acordo com os parametros otimos
-fis = fisFromMatrix(sigmaC, b);
-
 end
