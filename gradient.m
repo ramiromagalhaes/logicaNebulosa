@@ -73,8 +73,7 @@ for m = 1:nDados
             mf = fis.input(e).mf(mfIndex);
 
             %Chamando a funcao de inclusao e incluindo na multiplicatoria
-            output = feval(mf.type, dados(m, e), mf.params);
-            mv(r) = mv(r) * output;
+            mv(r) = mv(r) * feval(mf.type, dados(m, e), mf.params);
         end
     end
 
