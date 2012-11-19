@@ -104,7 +104,8 @@ for m = 1:nDados
     %temporaria para depois atualizar todos os parametros de todas as
     %funcoes de inclusao presentes em uma regra de uma vez so. Se não
     %fizermos vamos causar efeitos colaterais indesejados nos calculos dos
-    %novos parametros.
+    %novos parametros. Aqui, a coluna 1 contera as variancias, enquanto a
+    %coluna 2 contera os centros.
     novosParams = zeros(nEntradas, 2);
 
     %Atualizacao dos parametros de todas as funcoes de todas as regras
@@ -121,8 +122,7 @@ for m = 1:nDados
 
             entradaIteracao = dados(m, e); %a entrada que vou usar agora
 
-            %Equacao 7.18 do livro
-            %Aqui estava faltando elevar (entradaIteracao - centroAntigo) ao quadrado
+            %Equacao 7.18 do livro para atualizar as VARIANCIAS
             novosParams(e, 1) = ...
                 sigmaAntigo - lambdaSigma * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
 
