@@ -100,18 +100,19 @@ for m = 1:nDados
     %isso o deixamos precalculado.
     mvRegra = mv / dividendo;
 
+    %Guardamos os novos parametros de cada funcao em uma variavel
+    %temporaria para depois atualizar todos os parametros de todas as
+    %funcoes de inclusao presentes em uma regra de uma vez so. Se não
+    %fizermos vamos causar efeitos colaterais indesejados nos calculos dos
+    %novos parametros.
+    novosParams = zeros(nEntradas, 2);
+
     %Atualizacao dos parametros de todas as funcoes de todas as regras
     for r = 1:nRegras
         %O livro sugere comecar pela atualizacao dos consequentes de cada
         %regra, mas essa ordem nao e importante pois seus novos valores nao
         %serao usados para o calculo dos antecedentes. Somente os valores
         %antigos do consequente sao relevantes.
-
-        %Guardamos os novos parametros de cada funcao em uma variavel
-        %temporaria para, depois atualizar todos os parametros de todas
-        %as funcoes de inclusao presentes em uma regra de uma vez so.
-        novoCentro = 0;
-        novoSigma = 0;
 
         for e = 1:nEntradas
             %Obtencao dos parametros antigos
@@ -120,19 +121,18 @@ for m = 1:nDados
 
             entradaIteracao = dados(m, e); %a entrada que vou usar agora
 
-            %Equacao 7.17 do livro
-            novoCentro = centroAntigo - lambdaC * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)/(sigmaAntigo^2));
-
             %Equacao 7.18 do livro
             %Aqui estava faltando elevar (entradaIteracao - centroAntigo) ao quadrado
-            novoSigma = sigmaAntigo - lambdaSigma * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
+            novosParams(e, 1) = ...
+                sigmaAntigo - lambdaSigma * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
+
+            %Equacao 7.17 do livro para atualizar os CENTROS
+            novosParams(e, 2) = ...
+                centroAntigo - lambdaC * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)/(sigmaAntigo^2));
         end
 
         %Atribuicao dos novos parametros das funcoes.
-        for e = 1:nEntradas
-            sigmaC(r, e, 1) = novoSigma;
-            sigmaC(r, e, 2) = novoCentro;
-        end
+        sigmaC(r, e) = novosParams(e);
 
         %Enfim, calculamos o parametro dos consequentes.
         b(r) = b(r) - lambdaB * epsilon * mvRegra(r);
