@@ -29,9 +29,9 @@ nRegras = size(fis.rule, 2); %quantidade de regras do sistema = nMFs1 * nMFs2
 
 %Os lambdas sao parametros que determinam o tamanho do passo que o
 %algoritmo dara ao atualizar um valor.
-lambdaB = 1;
-lambdaC = 1;
-lambdaSigma = 1;
+lambdaB = .5;
+lambdaC = .5;
+lambdaSigma = .5;
 
 %Vetor de erros a medida que as iteracoes progridem
 erros = zeros(nDados, 1);
@@ -106,6 +106,13 @@ for m = 1:nDados
         %regra, mas essa ordem nao e importante pois seus novos valores nao
         %serao usados para o calculo dos antecedentes. Somente os valores
         %antigos do consequente sao relevantes.
+
+        %Guardamos os novos parametros de cada funcao em uma variavel
+        %temporaria para, depois atualizar todos os parametros de todas
+        %as funcoes de inclusao presentes em uma regra de uma vez so.
+        novoCentro = 0;
+        novoSigma = 0;
+
         for e = 1:nEntradas
             %Obtencao dos parametros antigos
             sigmaAntigo = sigmaC(r, e, 1);
@@ -119,8 +126,10 @@ for m = 1:nDados
             %Equacao 7.18 do livro
             %Aqui estava faltando elevar (entradaIteracao - centroAntigo) ao quadrado
             novoSigma = sigmaAntigo - lambdaSigma * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
+        end
 
-            %Atribuicao dos novos parametros das funcoes.
+        %Atribuicao dos novos parametros das funcoes.
+        for e = 1:nEntradas
             sigmaC(r, e, 1) = novoSigma;
             sigmaC(r, e, 2) = novoCentro;
         end
