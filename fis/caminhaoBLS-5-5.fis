@@ -1,0 +1,89 @@
+[System]
+Name='caminhaoBLS-5-5'
+Type='sugeno'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=25
+AndMethod='prod'
+OrMethod='max'
+ImpMethod='prod'
+AggMethod='max'
+DefuzzMethod='wtaver'
+
+[Input1]
+Name='input1'
+Range=[0 100]
+NumMFs=5
+MF1='in1mf1':'gbellmf',[12.5 2 0]
+MF2='in1mf2':'gbellmf',[12.5 2 25]
+MF3='in1mf3':'gbellmf',[12.5 2 50]
+MF4='in1mf4':'gbellmf',[12.5 2 75]
+MF5='in1mf5':'gbellmf',[12.5 2 100]
+
+[Input2]
+Name='input2'
+Range=[-90 269]
+NumMFs=5
+MF1='in2mf1':'gbellmf',[44.875 2 -90]
+MF2='in2mf2':'gbellmf',[44.875 2 -0.25]
+MF3='in2mf3':'gbellmf',[44.875 2 89.5]
+MF4='in2mf4':'gbellmf',[44.875 2 179.25]
+MF5='in2mf5':'gbellmf',[44.875 2 269]
+
+[Output1]
+Name='output'
+Range=[-25.2 25.2]
+NumMFs=25
+MF1='out1mf1':'linear',[0 0 32.8928914957643]
+MF2='out1mf2':'linear',[0 0 5.16302653245042]
+MF3='out1mf3':'linear',[0 0 -39.5434257707783]
+MF4='out1mf4':'linear',[0 0 32.8138125414865]
+MF5='out1mf5':'linear',[0 0 35.4779134684591]
+MF6='out1mf6':'linear',[0 0 26.5847301660655]
+MF7='out1mf7':'linear',[0 0 16.8233811639434]
+MF8='out1mf8':'linear',[0 0 -34.9548840507229]
+MF9='out1mf9':'linear',[0 0 1.22775703337992]
+MF10='out1mf10':'linear',[0 0 1.03393837974701]
+MF11='out1mf11':'linear',[0 0 29.9005486477579]
+MF12='out1mf12':'linear',[0 0 34.014429343561]
+MF13='out1mf13':'linear',[0 0 0.219499047407472]
+MF14='out1mf14':'linear',[0 0 -33.8564860962759]
+MF15='out1mf15':'linear',[0 0 -29.966507255757]
+MF16='out1mf16':'linear',[0 0 -0.880104600874776]
+MF17='out1mf17':'linear',[0 0 -1.64557950891533]
+MF18='out1mf18':'linear',[0 0 35.0212292782708]
+MF19='out1mf19':'linear',[0 0 -16.2117493949101]
+MF20='out1mf20':'linear',[0 0 -26.7738181278484]
+MF21='out1mf21':'linear',[0 0 -35.2070473930473]
+MF22='out1mf22':'linear',[0 0 -33.5724076673964]
+MF23='out1mf23':'linear',[0 0 39.3616308468076]
+MF24='out1mf24':'linear',[0 0 -4.38295993933895]
+MF25='out1mf25':'linear',[0 0 -33.0973631196635]
+
+[Rules]
+1 1, 1 (1) : 1
+1 2, 2 (1) : 1
+1 3, 3 (1) : 1
+1 4, 4 (1) : 1
+1 5, 5 (1) : 1
+2 1, 6 (1) : 1
+2 2, 7 (1) : 1
+2 3, 8 (1) : 1
+2 4, 9 (1) : 1
+2 5, 10 (1) : 1
+3 1, 11 (1) : 1
+3 2, 12 (1) : 1
+3 3, 13 (1) : 1
+3 4, 14 (1) : 1
+3 5, 15 (1) : 1
+4 1, 16 (1) : 1
+4 2, 17 (1) : 1
+4 3, 18 (1) : 1
+4 4, 19 (1) : 1
+4 5, 20 (1) : 1
+5 1, 21 (1) : 1
+5 2, 22 (1) : 1
+5 3, 23 (1) : 1
+5 4, 24 (1) : 1
+5 5, 25 (1) : 1
