@@ -114,7 +114,6 @@ for m = 1:nDados
         %regra, mas essa ordem nao e importante pois seus novos valores nao
         %serao usados para o calculo dos antecedentes. Somente os valores
         %antigos do consequente sao relevantes.
-
         for e = 1:nEntradas
             %Obtencao dos parametros antigos
             sigmaAntigo = sigmaC(r, e, 1);
