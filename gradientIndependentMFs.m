@@ -1,4 +1,4 @@
-function [fis erros] = gradient(dados, nMFs1, nMFs2, progress)
+function [fis erros] = gradientIndependentMFs(dados, nMFs1, nMFs2, progress)
 % Treinamento do sistema nebuloso do caminhão pelo método do gradiente. Ao
 % longo dessa funcao, referenciaremos equacoes da 3a. edicao do livro Fuzzy
 % Logic with Engineering Applications.
