@@ -4,7 +4,7 @@ function [tempoANFIS, tempoBLS, tempoRLS, tempoGrad] = treina(dados, nMFs1, nMFs
 % tempos tomados em cada treinamento.
 
     fisFolder = 'fis/';
-    fisNamePosfixo = ['-' num2str(nMFs1) '-' num2str(nMFs2)];
+    fisNomePosfixo = ['-' num2str(nMFs1) '-' num2str(nMFs2)];
 
     %treina ANFIS
     disp('Iniciando treinamento com o ANFIS');
@@ -13,7 +13,7 @@ function [tempoANFIS, tempoBLS, tempoRLS, tempoGrad] = treina(dados, nMFs1, nMFs
     fisANFIS = anfis(dados, novoFIS);
     fisANFIS.name = 'ANFIS';
     tempoANFIS = cputime - tInicial;
-    writefis(fisANFIS, [fisFolder 'caminhaoANFIS' fisNamePosfixo]);
+    writefis(fisANFIS, [fisFolder 'caminhaoANFIS' fisNomePosfixo]);
 
     %treina BLS
     disp('Iniciando treinamento com o BLS');
@@ -21,7 +21,7 @@ function [tempoANFIS, tempoBLS, tempoRLS, tempoGrad] = treina(dados, nMFs1, nMFs
     fisBLS = bls(dados, nMFs1, nMFs2);
     fisBLS.name = 'BLS';
     tempoBLS = cputime - tInicial;
-    writefis(fisBLS, [fisFolder 'caminhaoBLS' fisNamePosfixo]);
+    writefis(fisBLS, [fisFolder 'caminhaoBLS' fisNomePosfixo]);
 
     %treina RLS
     disp('Iniciando treinamento com o RLS');
@@ -29,14 +29,25 @@ function [tempoANFIS, tempoBLS, tempoRLS, tempoGrad] = treina(dados, nMFs1, nMFs
     fisRLS = rls(dados, nMFs1, nMFs2);
     fisRLS.name = 'RLS';
     tempoRLS = cputime - tInicial;
-    writefis(fisRLS, [fisFolder 'caminhaoRLS' fisNamePosfixo]);
+    writefis(fisRLS, [fisFolder 'caminhaoRLS' fisNomePosfixo]);
 
-    %treina Gradient
+    
+    tempoGrad = zeros(2, 1); %para os tempos do gradiente
+
+    %treina Gradiente
     disp('Iniciando treinamento com o Gradiente');
     tInicial = cputime;
     fisGrad = gradient(dados, nMFs1, nMFs2);
     fisGrad.name = 'Gradient';
-    tempoGrad = cputime - tInicial;
-    writefis(fisGrad, [fisFolder 'caminhaoGradient' fisNamePosfixo]);
+    tempoGrad(1) = cputime - tInicial;
+    writefis(fisGrad, [fisFolder 'caminhaoGradient' fisNomePosfixo]);
+
+    %treina Gradiente com MFs independentes das regras
+    disp('Iniciando treinamento com o Gradiente com MFs independentes');
+    tInicial = cputime;
+    fisGradIndepMFs = gradient(dados, nMFs1, nMFs2);
+    fisGradIndepMFs.name = 'Gradient Independent MFs';
+    tempoGrad(2) = cputime - tInicial;
+    writefis(fisGradIndepMFs, [fisFolder 'caminhaoGradientIndependentMFs' fisNomePosfixo]);
 end
 
