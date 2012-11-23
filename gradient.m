@@ -29,9 +29,9 @@ nRegras = size(fis.rule, 2); %quantidade de regras do sistema = nMFs1 * nMFs2
 
 %Os lambdas sao parametros que determinam o tamanho do passo que o
 %algoritmo dara ao atualizar um valor.
-lambdaB = 1;
-lambdaC = 1;
-lambdaSigma = 1;
+lambdaB = .5;
+lambdaC = .5;
+lambdaSigma = .5;
 
 %Vetor de erros a medida que as iteracoes progridem
 erros = zeros(nDados, 1);
@@ -86,8 +86,6 @@ for m = 1:nDados
     %Note que a reproducao da equacao 7.3 na pagina 224 esta incorreta,
     %pois a multiplicatoria do divisor vai de j = 1 a n, ao inves de R.
     defuzz = sum(mv .* b) / dividendo;
-    %Por que não usar evalfis???
-    %defuzz = evalfis(dados(m, 1:2), fis);
 
 
 
@@ -102,6 +100,14 @@ for m = 1:nDados
     %Este vetor sera utilizado multiplas vezes dentro do laco abaixo. Por
     %isso o deixamos precalculado.
     mvRegra = mv / dividendo;
+
+    %Guardamos os novos parametros de cada funcao em uma variavel
+    %temporaria para depois atualizar todos os parametros de todas as
+    %funcoes de inclusao presentes em uma regra de uma vez so. Se não
+    %fizermos vamos causar efeitos colaterais indesejados nos calculos dos
+    %novos parametros. Aqui, a coluna 1 contera as variancias, enquanto a
+    %coluna 2 contera os centros.
+    novosParams = zeros(nEntradas, 2);
 
     %Atualizacao dos parametros de todas as funcoes de todas as regras
     for r = 1:nRegras
@@ -121,16 +127,18 @@ for m = 1:nDados
 
             entradaIteracao = dados(m, e); %a entrada que vou usar agora
 
-            %Equacao 7.17 do livro
-            novoCentro = centroAntigo - lambdaC * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)/(sigmaAntigo^2));
-
             %Equacao 7.18 do livro
-            %Aqui estava faltando elevar (entradaIteracao - centroAntigo) ao quadrado
-            novoSigma = sigmaAntigo - lambdaSigma * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
+            novosParams(e, 1) = sigmaAntigo - lambdaSigma * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)^2/(sigmaAntigo^3));
 
-            %Atribuicao dos novos parametros das funcoes.
-            fis.input(e).mf(mfIndex).params(1) = novoSigma;
-            fis.input(e).mf(mfIndex).params(2) = novoCentro;
+            %Equacao 7.17 do livro
+            novosParams(e, 2) = centroAntigo - lambdaC * epsilon * (b(r) - defuzz) * mvRegra(r) * ((entradaIteracao - centroAntigo)/(sigmaAntigo^2));
+        end
+
+        %Atribuicao dos novos parametros das funcoes.
+        for e = 1:nEntradas
+            mfIndex = fis.rule(r).antecedent(e);
+            fis.input(e).mf(mfIndex).params(1) = novosParams(e, 1);
+            fis.input(e).mf(mfIndex).params(2) = novosParams(e, 2);
         end
 
         %Enfim, calculamos o parametro dos consequentes.
