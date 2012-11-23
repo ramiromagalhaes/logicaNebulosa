@@ -11,10 +11,10 @@ function data = geradados(fisFileName, saveToFile)
 %                da pasta 'data'.
 
     if nargin < 1
-        fis = readfis('fis/caminhao-default.fis');
+        fis = readfis('fis/caminhao-genetico.fis');
     else
         if (strcmp(fisFileName,'default'))
-            fis = readfis('fis/caminhao-default.fis');
+            fis = readfis('fis/caminhao-genetico.fis');
         else
             fis = readfis(fisFileName);
         end
