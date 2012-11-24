@@ -1,37 +1,25 @@
-function treina(dados, nMFs1, nMFs2)
-% Executa os 4 treinamentos: ANFIS, BLS, RLS e Gradiente. Os FIS
-% resultantes serao salvos na subpasta 'fis'. Retorna um vetor com os
-% tempos tomados em cada treinamento.
-
-    fisFolder = 'fis/';
-    fisSufixo = ['-' num2str(nMFs1) '-' num2str(nMFs2)];
-
+function treina(dados)
     %treina ANFIS
     disp('Iniciando treinamento com o ANFIS');
     treina_anfis(dados);
 
-    %treina BLS
-    disp('Iniciando treinamento com o BLS');
-    fisBLS = bls(dados, nMFs1, nMFs2);
-    fisBLS.name = 'BLS';
-    writefis(fisBLS, [fisFolder 'caminhaoBLS' fisSufixo]);
+    disp('==============================');
+    disp('Treinamentos com 3 parametros.');
+    disp('==============================');
+    treina_bls_rls_grad(dados, 3, 3);
 
-    %treina RLS
-    disp('Iniciando treinamento com o RLS');
-    fisRLS = rls(dados, nMFs1, nMFs2);
-    fisRLS.name = 'RLS';
-    writefis(fisRLS, [fisFolder 'caminhaoRLS' fisSufixo]);
+    disp('==============================');
+    disp('Treinamentos com 5 parametros.');
+    disp('==============================');
+    treina_bls_rls_grad(dados, 5, 5);
 
-    %treina Gradiente
-    disp('Iniciando treinamento com o Gradiente');
-    fisGrad = gradient(dados, nMFs1, nMFs2);
-    fisGrad.name = 'Gradient';
-    writefis(fisGrad, [fisFolder 'caminhaoGradient' fisSufixo]);
+    disp('==============================');
+    disp('Treinamentos com 7 parametros.');
+    disp('==============================');
+    treina_bls_rls_grad(dados, 7, 7);
 
-    %treina Gradiente com MFs independentes das regras
-    disp('Iniciando treinamento com o Gradiente com MFs independentes');
-    fisGradIndepMFs = gradient(dados, nMFs1, nMFs2);
-    fisGradIndepMFs.name = 'Gradient Independent MFs';
-    writefis(fisGradIndepMFs, [fisFolder 'caminhaoGradientIndependentMFs' fisSufixo]);
+    disp('===============================');
+    disp('Treinamentos com 10 parametros.');
+    disp('===============================');
+    treina_bls_rls_grad(dados, 10, 10);
 end
-
