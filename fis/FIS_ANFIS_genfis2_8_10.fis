@@ -1,0 +1,37 @@
+[System]
+Name='FIS_ANFIS_genfis2_8_10'
+Type='sugeno'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=2
+AndMethod='prod'
+OrMethod='probor'
+ImpMethod='prod'
+AggMethod='max'
+DefuzzMethod='wtaver'
+
+[Input1]
+Name='in1'
+Range=[0 100]
+NumMFs=2
+MF1='in1cluster1':'gaussmf',[35.3534680977138 51.5653624474332]
+MF2='in1cluster2':'gaussmf',[35.3455737073246 47.424622644624]
+
+[Input2]
+Name='in2'
+Range=[-90 269]
+NumMFs=2
+MF1='in2cluster1':'gaussmf',[126.926992199849 38.358628845522]
+MF2='in2cluster2':'gaussmf',[126.927624001363 166.70838352946]
+
+[Output1]
+Name='out1'
+Range=[-25.2 25.2]
+NumMFs=2
+MF1='out1cluster1':'linear',[-0.565670504120711 1.13266104411259 261.600347857564]
+MF2='out1cluster2':'linear',[-0.64093933203511 1.2581209495623 -452.10641934561]
+
+[Rules]
+1 1, 1 (1) : 1
+2 2, 2 (1) : 1

@@ -1,0 +1,61 @@
+[System]
+Name='FIS_ANFIS_genfis2_16_6'
+Type='sugeno'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=8
+AndMethod='prod'
+OrMethod='probor'
+ImpMethod='prod'
+AggMethod='max'
+DefuzzMethod='wtaver'
+
+[Input1]
+Name='in1'
+Range=[0 100]
+NumMFs=8
+MF1='in1cluster1':'gaussmf',[21.1254026188409 52.5234003441903]
+MF2='in1cluster2':'gaussmf',[21.1253566049452 47.4779555046218]
+MF3='in1cluster3':'gaussmf',[21.2082667203757 87.898914869237]
+MF4='in1cluster4':'gaussmf',[21.2105091423454 12.0996712626371]
+MF5='in1cluster5':'gaussmf',[21.1778644326802 89.9375696444639]
+MF6='in1cluster6':'gaussmf',[21.1758290251192 10.065214674625]
+MF7='in1cluster7':'gaussmf',[21.2561745993573 12.143570519579]
+MF8='in1cluster8':'gaussmf',[21.2570699224332 87.8562735845554]
+
+[Input2]
+Name='in2'
+Range=[-90 269]
+NumMFs=8
+MF1='in2cluster1':'gaussmf',[76.1721552868705 -1.77271327930292]
+MF2='in2cluster2':'gaussmf',[76.1728073398985 180.767559053508]
+MF3='in2cluster3':'gaussmf',[76.1511243882877 98.5338673423817]
+MF4='in2cluster4':'gaussmf',[76.1517197302097 82.4692448492452]
+MF5='in2cluster5':'gaussmf',[76.1418225226771 -31.8285561894415]
+MF6='in2cluster6':'gaussmf',[76.1421352717182 212.830447741575]
+MF7='in2cluster7':'gaussmf',[76.1591156596439 -61.9177210052181]
+MF8='in2cluster8':'gaussmf',[76.1589435269974 240.915828410402]
+
+[Output1]
+Name='out1'
+Range=[-25.2 25.2]
+NumMFs=8
+MF1='out1cluster1':'linear',[3.63362949732539 -0.0115058969213558 -123.480127058491]
+MF2='out1cluster2':'linear',[3.60510649419014 -0.0177146149283837 -235.052104074976]
+MF3='out1cluster3':'linear',[1.79579540720271 -0.503892109676708 -11.8968128054]
+MF4='out1cluster4':'linear',[1.81461554417477 -0.514316326562638 -74.8322566487368]
+MF5='out1cluster5':'linear',[1.69087567532188 -1.01191382572012 -305.371162234713]
+MF6='out1cluster6':'linear',[1.63352460331976 -1.04627001065835 326.850838743611]
+MF7='out1cluster7':'linear',[0.424650242439779 0.460158082046832 70.2914605530434]
+MF8='out1cluster8':'linear',[0.399808908804034 0.477710240635357 -197.975216238031]
+
+[Rules]
+1 1, 1 (1) : 1
+2 2, 2 (1) : 1
+3 3, 3 (1) : 1
+4 4, 4 (1) : 1
+5 5, 5 (1) : 1
+6 6, 6 (1) : 1
+7 7, 7 (1) : 1
+8 8, 8 (1) : 1

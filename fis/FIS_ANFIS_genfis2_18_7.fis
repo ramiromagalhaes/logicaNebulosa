@@ -1,0 +1,61 @@
+[System]
+Name='FIS_ANFIS_genfis2_18_7'
+Type='sugeno'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=8
+AndMethod='prod'
+OrMethod='probor'
+ImpMethod='prod'
+AggMethod='max'
+DefuzzMethod='wtaver'
+
+[Input1]
+Name='in1'
+Range=[0 100]
+NumMFs=8
+MF1='in1cluster1':'gaussmf',[24.638968869219 52.5062594154059]
+MF2='in1cluster2':'gaussmf',[24.6428910982823 47.4874894253383]
+MF3='in1cluster3':'gaussmf',[24.7274027461808 90.9435850098084]
+MF4='in1cluster4':'gaussmf',[24.7297369299732 9.04978227851034]
+MF5='in1cluster5':'gaussmf',[24.7441040188548 93.9583141313368]
+MF6='in1cluster6':'gaussmf',[24.7431891428268 5.03291459694455]
+MF7='in1cluster7':'gaussmf',[24.7984612131636 1.03278179279519]
+MF8='in1cluster8':'gaussmf',[24.8001068970299 98.9677128582976]
+
+[Input2]
+Name='in2'
+Range=[-90 269]
+NumMFs=8
+MF1='in2cluster1':'gaussmf',[88.8711594964364 4.24081283372821]
+MF2='in2cluster2':'gaussmf',[88.8675052248394 174.760183370867]
+MF3='in2cluster3':'gaussmf',[88.8202976456175 -39.8470419887416]
+MF4='in2cluster4':'gaussmf',[88.8201903532478 218.849341675238]
+MF5='in2cluster5':'gaussmf',[88.8558974609652 102.539913842184]
+MF6='in2cluster6':'gaussmf',[88.8548035107823 80.4639297917769]
+MF7='in2cluster7':'gaussmf',[88.8471311313147 -75.9571413992769]
+MF8='in2cluster8':'gaussmf',[88.8475407493018 256.955881677663]
+
+[Output1]
+Name='out1'
+Range=[-25.2 25.2]
+NumMFs=8
+MF1='out1cluster1':'linear',[5.19573268797501 0.229124293455265 -141.746297309578]
+MF2='out1cluster2':'linear',[5.50104622912492 0.209847653452395 -429.373127352892]
+MF3='out1cluster3':'linear',[1.96032465607039 -1.92643101668849 -471.235927662123]
+MF4='out1cluster4':'linear',[1.93984138552456 -2.01465962154885 653.172419812487]
+MF5='out1cluster5':'linear',[3.02014101534265 -0.994110197744729 -19.5307056270381]
+MF6='out1cluster6':'linear',[2.69121718927817 -1.04764431911544 -105.136499504977]
+MF7='out1cluster7':'linear',[0.738355083232169 0.773698827535566 104.354949527694]
+MF8='out1cluster8':'linear',[0.751799772692151 0.836753140851038 -336.678176179967]
+
+[Rules]
+1 1, 1 (1) : 1
+2 2, 2 (1) : 1
+3 3, 3 (1) : 1
+4 4, 4 (1) : 1
+5 5, 5 (1) : 1
+6 6, 6 (1) : 1
+7 7, 7 (1) : 1
+8 8, 8 (1) : 1

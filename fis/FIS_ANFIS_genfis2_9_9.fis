@@ -1,0 +1,45 @@
+[System]
+Name='FIS_ANFIS_genfis2_9_9'
+Type='sugeno'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=4
+AndMethod='prod'
+OrMethod='probor'
+ImpMethod='prod'
+AggMethod='max'
+DefuzzMethod='wtaver'
+
+[Input1]
+Name='in1'
+Range=[0 100]
+NumMFs=4
+MF1='in1cluster1':'gaussmf',[31.8051959409726 52.5462874639384]
+MF2='in1cluster2':'gaussmf',[31.7984783058728 47.4569121350372]
+MF3='in1cluster3':'gaussmf',[31.8712797932984 97.9655926647747]
+MF4='in1cluster4':'gaussmf',[31.8547011048824 0.00672112947657821]
+
+[Input2]
+Name='in2'
+Range=[-90 269]
+NumMFs=4
+MF1='in2cluster1':'gaussmf',[114.24001216863 32.3426491524819]
+MF2='in2cluster2':'gaussmf',[114.241087652057 168.718895569444]
+MF3='in2cluster3':'gaussmf',[114.207458799255 -59.9225329597676]
+MF4='in2cluster4':'gaussmf',[114.211708766421 246.94653448128]
+
+[Output1]
+Name='out1'
+Range=[-25.2 25.2]
+NumMFs=4
+MF1='out1cluster1':'linear',[2.19402506298001 -0.408315768525743 21.1292051575968]
+MF2='out1cluster2':'linear',[1.69245122023382 -0.22818151723849 -164.394864428801]
+MF3='out1cluster3':'linear',[2.23995736437352 -0.0301257681646827 -332.683335627208]
+MF4='out1cluster4':'linear',[2.50973481046979 -0.0151184388869369 112.288373040198]
+
+[Rules]
+1 1, 1 (1) : 1
+2 2, 2 (1) : 1
+3 3, 3 (1) : 1
+4 4, 4 (1) : 1

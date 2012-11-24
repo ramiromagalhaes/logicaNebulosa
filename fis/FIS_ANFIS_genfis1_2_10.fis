@@ -1,0 +1,41 @@
+[System]
+Name='FIS_ANFIS_genfis1_2_10'
+Type='sugeno'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=4
+AndMethod='prod'
+OrMethod='max'
+ImpMethod='prod'
+AggMethod='max'
+DefuzzMethod='wtaver'
+
+[Input1]
+Name='input1'
+Range=[0 100]
+NumMFs=2
+MF1='in1mf1':'gbellmf',[50.0005179482853 1.99393679538638 0.000191626003615697]
+MF2='in1mf2':'gbellmf',[50.0006523185027 1.99444843528354 99.9996586730929]
+
+[Input2]
+Name='input2'
+Range=[-90 269]
+NumMFs=2
+MF1='in2mf1':'gbellmf',[179.497782090643 2.0641831342559 -90.0014108291502]
+MF2='in2mf2':'gbellmf',[179.497865329477 2.06808044529552 269.001294478286]
+
+[Output1]
+Name='output'
+Range=[-25.2 25.2]
+NumMFs=4
+MF1='out1mf1':'linear',[0.45732839715225 -0.439936860017723 -7.03339637412311]
+MF2='out1mf2':'linear',[-1.70745527664479 0.364448159084189 -25.9676865968558]
+MF3='out1mf3':'linear',[-1.71743873009201 0.347463085542999 130.891010782166]
+MF4='out1mf4':'linear',[0.459499083541362 -0.458095003294932 44.5238019551289]
+
+[Rules]
+1 1, 1 (1) : 1
+1 2, 2 (1) : 1
+2 1, 3 (1) : 1
+2 2, 4 (1) : 1
