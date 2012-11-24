@@ -4,12 +4,7 @@ function simula()
     fisDirName = 'fis/';
     outputDirName = 'data/';
 
-    %'Velocidade' do caminhao.
-    delta = 5;
-
-    %distancia contada a partir das paredes do estacionamento nas quais o
-    %caminhao pode ser colocado aleatoriamente.
-    padding = ceil(delta*(cosd(30) + cosd(60)));
+    iteracoes = 1000;
 
     fisList = dir(fisDirName);
     fisListSize = size(fisList, 1);
@@ -34,7 +29,7 @@ function simula()
         fis = readfis([fisDirName filename]);
 
         tInicial = cputime;
-        resultado = simula_estacionamento(delta, 50, 100, 0, 0.05, 10000, [0 100 0 100], padding, [-90 270], fis, progressBarSimulacoes);
+        resultado = simula_estacionamento(0.05, iteracoes, fis, progressBarSimulacoes);
         estatisticas = avalia_resultados(resultado);
         disp(['Segundos tomados: ' num2str(cputime - tInicial)]);
 

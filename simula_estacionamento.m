@@ -1,23 +1,15 @@
-function resultado = simula_estacionamento(delta, xmeta, ymeta, phimeta, erro, max_iteracoes, estacionamento, padding, universo_phi, fis, varargin)
+function resultado = simula_estacionamento(erro, iteracoes, fis, varargin)
 % Simula diversas iterações do estacionamento e escreve o resultado da
 % simulação num arquivo ou na memória o resultado.
 %   ENTRADAS
-%    delta: "velocidade" do caminhao. Quantas unidades lineares ele se desloca por iteração.
-%    xmeta: o valor ideal de x para onde o caminhão deve se deslocar.
-%    ymeta: o valor ideal de y para onde o caminhão deve se deslocar.
-%    phimeta: o valor ideal de phi que o caminhão deve ter final de seu deslocamento.
 %    erro: o erro tolerado para o estacionamento.
-%    estacionamento: vetor [xi, xf, yi, yf], com as dimensões do estacionamento
-%    estacionamento: vetor [phii, phif], com os limites de phi
+%    iteracoes: a quantidade de iteracoes que faremos.
 %    fis: o descritor do sistema nebuloso
 %    ----ARGUMENTOS OPCIONAIS
 %        progress_bar: barra de progresso das simulacoes.
-%        file: descritor do arquivo aberto para escrita de texto para onde os resultados serão gravados.
 %
-%   SAIDA: A saída muda de acordo com o uso do parâmetro opcional
-%   (descritor do arquivo). Se foi fornecido um descritor de arquivo, o
-%   parâmetro de saída é 0. Senão, será uma matriz com os resultados, onde
-%   cada linha 'i' (isto é, resultado(i)) contém a saída da simulação i.
+%   SAIDA: uma matriz com os resultados, onde cada linha 'i' (isto é,
+%   resultado(i)) contém a saída da simulação i.
 %   As colunas de resultado serão as seguintes:
 %       resultado(i, 1):  valor inicial de x usado na simulação i
 %       resultado(i, 2):  valor inicial de y usado na simulação i
@@ -35,54 +27,55 @@ function resultado = simula_estacionamento(delta, xmeta, ymeta, phimeta, erro, m
 %       resultado(i, 14): o Erro de Trajetória na simulação i
 
     update_progress_bar = false;
-    write_to_file = false; %se false, vou retornar a memória
-    file = 0; %file descriptor do arquivo de saída
 
     if (length(varargin) >= 1)
         progress_bar = varargin{1};
         update_progress_bar = true;
     end
-    %se recebemos um descritor de arquivo como parâmetro da função, vamos
-    %escrever nele.
-    if (length(varargin) >= 2)
-        file = varargin{2};
-        write_to_file = true;
-    end
 
-    %se não vamos escrever em arquivo, o resultado retorna em uma matriz
-    if (~write_to_file)
-        %número mágico 14 é a quantidade de valores que retornamos
-        resultado = zeros(max_iteracoes, 14);
-    end
+    %matriz de resultados
+    resultado = zeros(iteracoes, 14);
+
+
+
+    %Quantidade de passos que o caminhao anda por iteracao. E a velocidade.
+    delta = 5;
+
+    %distancia contada a partir das paredes do estacionamento nas quais o
+    %caminhao pode ser colocado aleatoriamente.
+    padding = ceil(delta*(cosd(30) + cosd(60)));
+
+    % xmeta: o valor ideal de x para onde o caminhão deve se deslocar.
+    xmeta = 50;
+
+    % ymeta: o valor ideal de y para onde o caminhão deve se deslocar.
+    ymeta = 100;
+
+    % phimeta: o valor ideal de phi que o caminhão deve ter final de seu deslocamento.
+    phimeta = 0;
+
+    %Universo de discurso do estacionamento descrito no formato
+    %[x_inicial, x_final, y_inicial, y_final]
+    estacionamento = [0, 100, 0, 100];
+
+    %Universo de discurso do angulo do caminhao (phi)
+    % o limite foi definido como [-105, 285] para cobrir eventuais valores fora
+    % do limite mas os angulos variam de [-90,270]
+    universo_phi = [-90 270];
 
 
 
     %laco principal
-    for iteracao = 1:max_iteracoes
+    for iteracao = 1:iteracoes
         x = rnd_position(estacionamento(1) + padding, estacionamento(2) - padding); %não colocaremos o caminhão colado na parede
         y = rnd_position(estacionamento(3) + padding, 50); %não colocaremos o caminhão colado na parede. O '50' vem das restrições do problema original
         phi = rnd_position(universo_phi(1), universo_phi(2));
 
-        if (write_to_file)
-            resultado = estaciona(x, y, phi, delta, xmeta, ymeta, phimeta, erro, estacionamento, fis);
+        resultado(iteracao,:) = [x y phi delta estaciona(x, y, phi, delta, xmeta, ymeta, phimeta, erro, estacionamento, fis)];
 
-            %escreve resultados no arquivo
-            fprintf(file,'%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\n',...
-                    x, y, phi, delta, resultado(1),resultado(2),resultado(3),resultado(4),resultado(5),...
-                                      resultado(6),resultado(7),resultado(8),resultado(9),resultado(10));
-        else
-            resultado(iteracao,:) = [x y phi delta estaciona(x, y, phi, delta, xmeta, ymeta, phimeta, erro, estacionamento, fis)];
+        if (update_progress_bar) %atualiza contador de progresso, se conveniente
+            waitbar(iteracao/iteracoes, progress_bar);
         end
-
-        %atualiza contador de progresso, se estiver escrevendo em arquivo.
-        if (update_progress_bar)
-            waitbar(iteracao/max_iteracoes, progress_bar);
-        end
-    end
-
-    if (write_to_file)
-        %caso tenha escrito toda a saida em arquivo, preciso retornar algo
-        resultado = 0;
     end
 
 end
