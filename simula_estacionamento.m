@@ -52,7 +52,7 @@ function resultado = simula_estacionamento(erro, iteracoes, fis, varargin)
     ymeta = 100;
 
     % phimeta: o valor ideal de phi que o caminhão deve ter final de seu deslocamento.
-    phimeta = 0;
+    phimeta = 90;
 
     %Universo de discurso do estacionamento descrito no formato
     %[x_inicial, x_final, y_inicial, y_final]
