@@ -45,7 +45,11 @@ function fixphi()
             data(i, 13) = EE;
 
             csvwrite([outputDirName filename], data);
-            csvwrite([outputDirName filename '-estatisticas.csv'], avalia_resultados(resultado));
+
+            estatisticas = avalia_resultados(data);
+
+            estatisticasFilename = filename(1:length(filename) - 4);
+            csvwrite([outputDirName estatisticasFilename '-estatisticas.csv'], estatisticas);
         end
     end
 end
