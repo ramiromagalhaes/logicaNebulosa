@@ -131,7 +131,9 @@ for m = 1:nDados
         end
 
         %Atribuicao dos novos parametros das funcoes.
-        sigmaC(r, e) = novosParams(e);
+        for e = 1:nEntradas
+            sigmaC(r, e) = novosParams(e);
+        end
 
         %Enfim, calculamos o parametro dos consequentes.
         b(r) = b(r) - lambdaB * epsilon * mvRegra(r);
