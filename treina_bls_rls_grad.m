@@ -26,7 +26,7 @@ function treina_bls_rls_grad(dados, nMFs1, nMFs2)
 
     %treina Gradiente com MFs independentes das regras
     disp('Iniciando treinamento com o Gradiente com MFs independentes');
-    fisGradIndepMFs = gradient(dados, nMFs1, nMFs2);
+    fisGradIndepMFs = gradientIndependentMFs(dados, nMFs1, nMFs2);
     fisGradIndepMFs.name = 'Gradient Independent MFs';
     writefis(fisGradIndepMFs, [fisFolder 'caminhaoGradientIndependentMFs' fisSufixo]);
 end
