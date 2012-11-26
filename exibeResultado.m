@@ -19,7 +19,7 @@ function r = exibeResultado(filename)
     end
 
     fprintf('                                   Media     Desv-Padrao\n');
-    fprintf('Perc. de estacionamentos corretos: %5.2f     %5.2f\n', data(1, 8), data(2, 8));
+    fprintf('Perc. de estacionamentos corretos: %5.2f      n/a\n', data(1, 8));
     fprintf('Erro de X                        : %5.2f     %5.2f\n', data(1, 10), data(2, 10));
     fprintf('Erro de Y                        : %5.2f     %5.2f\n', data(1, 11), data(2, 11));
     fprintf('Erro de PHI                      : %5.2f     %5.2f\n', data(1, 12), data(2, 12));
