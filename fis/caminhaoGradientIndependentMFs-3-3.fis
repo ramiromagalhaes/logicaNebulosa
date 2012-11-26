@@ -12,42 +12,54 @@ AggMethod='max'
 DefuzzMethod='wtaver'
 
 [Input1]
-Name='input1'
+Name='x'
 Range=[0 100]
-NumMFs=3
-MF1='in1mf1':'gaussmf',[43.9171581711646 85.6382223894101]
-MF2='in1mf2':'gaussmf',[-192.255849940275 22.6174943201052]
-MF3='in1mf3':'gaussmf',[2.04708290257497 108.865148134715]
+NumMFs=9
+MF1='inputmf1':'gaussmf',[21.2330450072005 0]
+MF2='inputmf2':'gaussmf',[21.2330450072005 0]
+MF3='inputmf3':'gaussmf',[21.2330450072005 0]
+MF4='inputmf4':'gaussmf',[21.2330450072005 50]
+MF5='inputmf5':'gaussmf',[21.2330450072005 50]
+MF6='inputmf6':'gaussmf',[21.2330450072005 50]
+MF7='inputmf7':'gaussmf',[21.2330450072005 100]
+MF8='inputmf8':'gaussmf',[21.2330450072005 100]
+MF9='inputmf9':'gaussmf',[21.2330450072005 100]
 
 [Input2]
-Name='input2'
-Range=[-90 269]
-NumMFs=3
-MF1='in2mf1':'gaussmf',[51.5098771660089 90.5693300950732]
-MF2='in2mf2':'gaussmf',[-189.690225672602 95.7428375288652]
-MF3='in2mf3':'gaussmf',[36.2624023436142 229.928129112039]
+Name='direcao'
+Range=[-90 270]
+NumMFs=9
+MF1='inputmf1':'gaussmf',[108.90841509979 -90]
+MF2='inputmf2':'gaussmf',[13.4072753241685 89.5]
+MF3='inputmf3':'gaussmf',[101.368226630643 269]
+MF4='inputmf4':'gaussmf',[102.97211028433 -90]
+MF5='inputmf5':'gaussmf',[170.099096000562 89.5]
+MF6='inputmf6':'gaussmf',[100.710532375876 269]
+MF7='inputmf7':'gaussmf',[75.7443680482499 -90]
+MF8='inputmf8':'gaussmf',[49.0353641645703 89.5]
+MF9='inputmf9':'gaussmf',[66.3241210540773 269]
 
 [Output1]
-Name='output'
-Range=[-25.2 25.2]
+Name='volante'
+Range=[-30 30]
 NumMFs=9
-MF1='out1mf1':'linear',[0 0 144.135089345469]
-MF2='out1mf2':'linear',[0 0 -53.4017440545138]
-MF3='out1mf3':'linear',[0 0 -23.7231583280681]
-MF4='out1mf4':'linear',[0 0 32.7256357009757]
-MF5='out1mf5':'linear',[0 0 -8.35002572053153]
-MF6='out1mf6':'linear',[0 0 -17.194016966182]
-MF7='out1mf7':'linear',[0 0 1.57061672017327]
-MF8='out1mf8':'linear',[0 0 0.602919134412972]
-MF9='out1mf9':'linear',[0 0 -2.63557543352381]
+MF1='outputmf1':'linear',[0 0 87.9280250203955]
+MF2='outputmf2':'linear',[0 0 -45.8120939857554]
+MF3='outputmf3':'linear',[0 0 3.52860212626654]
+MF4='outputmf4':'linear',[0 0 47.5808994453329]
+MF5='outputmf5':'linear',[0 0 -26.7557003142163]
+MF6='outputmf6':'linear',[0 0 -85.4956600578146]
+MF7='outputmf7':'linear',[0 0 -41.0352270161158]
+MF8='outputmf8':'linear',[0 0 38.5458335706613]
+MF9='outputmf9':'linear',[0 0 -21.4823786223544]
 
 [Rules]
 1 1, 1 (1) : 1
-1 2, 2 (1) : 1
-1 3, 3 (1) : 1
-2 1, 4 (1) : 1
-2 2, 5 (1) : 1
-2 3, 6 (1) : 1
-3 1, 7 (1) : 1
-3 2, 8 (1) : 1
-3 3, 9 (1) : 1
+2 2, 2 (1) : 1
+3 3, 3 (1) : 1
+4 4, 4 (1) : 1
+5 5, 5 (1) : 1
+6 6, 6 (1) : 1
+7 7, 7 (1) : 1
+8 8, 8 (1) : 1
+9 9, 9 (1) : 1
