@@ -1,4 +1,4 @@
-# 2º Trabalho de Lógica Nebulosa - PPGI - Universidade Federal do Rio de Janeiro
+# 2º Trabalho de Lógica Nebulosa - Universidade Federal do Rio de Janeiro - PPGI
 Este é o código-fonte e resultados das simulações e treinamentos do 2º trabalho de Lógica Nebulosa do 3º bloco de 2012 do Programa de Pós-Graduação de Informática da Universidade Federal do Rio de Janeiro.
 
 Os autores deste trabalho são:
