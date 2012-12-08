@@ -3,10 +3,10 @@ Este é o código-fonte e resultados das simulações e treinamentos do 2º trab
 
 Os autores deste trabalho são:
 
-> Juan Marcelo Dell’Oso                		112094854
-> Mariam dos Passos Afonso da Conceição		112169455
-> Ramiro Pereira de Magalhães          		111510679
-> Renato Moura Martins Medeiros        		112113797
+> Juan Marcelo Dell’Oso                		(112094854)  
+> Mariam dos Passos Afonso da Conceição		(112169455)  
+> Ramiro Pereira de Magalhães          		(111510679)  
+> Renato Moura Martins Medeiros        		(112113797)  
 
 # Dados de treinamento
 Os dados utilizados para o treinamento de sistemas nebulosos com os diversos algoritmos que experimentamos (BLS, RLS, Gradiente e ANFIS) estão no arquivo 'treino/treinamento.csv' e podem ser facilmente carregados usando a função 'csvread' do Matlab.
