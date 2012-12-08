@@ -16,7 +16,7 @@ Esses dados foram gerados com o auxílio da função 'geradados', que depende do
 # Treinamento
 Use a função 'treina' para treinar sistemas nebulosos TSK usando os métodos BLS, RLS, Gradiente e ANFIS. O único parâmetro dessa função é a massa de dados com a qual o treinamento será executado. Ao total, são mais de 600 treinamentos diferentes que serão feitos, e podem demorar várias horas para serem concluídos.
 
-Se precisar fazer treinamentos diferentes e com outros parâmetros, consulte as funções 'bls', 'rls', 'gradiente' que desenvolvemos, assim como a função ANFIS do Matlab. Para mais detalhes, veja nosso relatório em [https://docs.google.com/document/d/1UuyMFG5MQJrIryI72-0zRUgXDsCP97XGaSAwr1r_Vk0].
+Se precisar fazer treinamentos diferentes e com outros parâmetros, consulte as funções 'bls', 'rls', 'gradiente' que desenvolvemos, assim como a função ANFIS do Matlab. Para mais detalhes, veja nosso relatório em https://docs.google.com/document/d/1UuyMFG5MQJrIryI72-0zRUgXDsCP97XGaSAwr1r_Vk0.
 
 *Nota:* os descritores dos sistemas nebulosos são arquivos FIS que serão armazenados na pasta 'fis' durante a execução dos treinamento.
 
