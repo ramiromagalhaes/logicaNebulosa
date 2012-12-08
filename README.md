@@ -11,6 +11,8 @@ Os autores deste trabalho são:
 # Dados de treinamento
 Os dados utilizados para o treinamento de sistemas nebulosos com os diversos algoritmos que experimentamos (BLS, RLS, Gradiente e ANFIS) estão no arquivo 'treino/treinamento.csv' e podem ser facilmente carregados usando a função 'csvread' do Matlab.
 
+Esses dados foram gerados com o auxílio da função 'geradados', que depende do arquivo 'fis/caminhao-genetico.fis'.
+
 # Treinamento
 Use a função 'treina' para treinar sistemas nebulosos TSK usando os métodos BLS, RLS, Gradiente e ANFIS. O único parâmetro dessa função é a massa de dados com a qual o treinamento será executado. Ao total, são mais de 600 treinamentos diferentes que serão feitos, e podem demorar várias horas para serem concluídos.
 
@@ -22,5 +24,9 @@ Se precisar fazer treinamentos diferentes e com outros parâmetros, consulte as 
 Use a função 'simula' para executar simulações com todos os sistemas nebulosos descritos em arquivos FIS presentes na pasta 'fis'. Note que são mais de 600 simulações que serão executadas. Na nossa experiência o tempo total dispendido na execução de todas as simulações supera 9 horas.
 
 Se precisar fazer simulações específicas com outros parâmetros ou sistemas nebulosos, consulte a função 'simula_estacionamento'.
+
+*Nota:* os dados de cada simulação são gravados na pasta 'data'. Para cada simulação 2 arquivos com resultados são criados: o primeiro com o resultado de cada iteração da simulação; e o segundo com estatísticas que sumarizam os resultados de todas as iterações de cada simulação. Ambos os arquivos podem ser facilmente lidos com a função 'csvread' do Matlab. Para conhecer suas estruturas, consulte a documentação das seguintes funções:
+* 'simula_estacionamento', e
+* 'avalia\_resultados'.
 
 
