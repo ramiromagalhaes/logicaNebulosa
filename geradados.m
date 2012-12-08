@@ -31,7 +31,7 @@ function data = geradados(fisFileName, saveToFile)
     );
     entradas = [X(:) PHI(:)];
 
-    %gera matriz com dados de entrada e sa�da [X PHI Saida]
+    %gera matriz com dados de entrada e saida [X PHI Saida]
     saidas = evalfis(entradas, fis);
     data = [entradas saidas];
 
