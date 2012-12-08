@@ -25,8 +25,7 @@ Use a função 'simula' para executar simulações com todos os sistemas nebulos
 
 Se precisar fazer simulações específicas com outros parâmetros ou sistemas nebulosos, consulte a função 'simula_estacionamento'.
 
-*Nota:* os dados de cada simulação são gravados na pasta 'data'. Para cada simulação 2 arquivos com resultados são criados: o primeiro com o resultado de cada iteração da simulação; e o segundo com estatísticas que sumarizam os resultados de todas as iterações de cada simulação. Ambos os arquivos podem ser facilmente lidos com a função 'csvread' do Matlab. Para conhecer suas estruturas, consulte a documentação das seguintes funções:
-* 'simula_estacionamento', e
-* 'avalia\_resultados'.
+*Nota:* os dados de cada simulação são gravados na pasta 'data'. Para cada simulação 2 arquivos com resultados são criados: o primeiro com o resultado de cada iteração da simulação; e o segundo com estatísticas que sumarizam os resultados de todas as iterações de cada simulação. Ambos os arquivos podem ser facilmente lidos com a função 'csvread' do Matlab. Para conhecer suas estruturas, consulte a documentação das funções 'simula_estacionamento', e 'avalia_resultados'.
 
+*Nota:* Uma forma conveniente de ler o arquivo de estatísticas é usando a função 'exibeResultado'. Ela recebe como parâmetro o nome do arquivo de estatísticas e apresenta, de forma amigável, os números relevantes contidos no arquivo passado como parâmetro.
 
