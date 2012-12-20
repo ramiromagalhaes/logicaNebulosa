@@ -1,10 +1,9 @@
-function resultado = simula_estacionamento(erro, iteracoes, fis, varargin)
+function resultado = simula_estacionamento(fis, iteracoes, varargin)
 % Simula diversas iterações do estacionamento e escreve o resultado da
 % simulação num arquivo ou na memória o resultado.
 %   ENTRADAS
-%    erro: o erro tolerado para o estacionamento.
-%    iteracoes: a quantidade de iteracoes que faremos.
 %    fis: o descritor do sistema nebuloso
+%    iteracoes: a quantidade de iteracoes que faremos.
 %    ----ARGUMENTOS OPCIONAIS
 %        progress_bar: barra de progresso das simulacoes.
 %
@@ -25,6 +24,8 @@ function resultado = simula_estacionamento(erro, iteracoes, fis, varargin)
 %       resultado(i, 12): o erro de phi na simulação i
 %       resultado(i, 13): o Erro do Estacionamento na simulação i
 %       resultado(i, 14): o Erro de Trajetória na simulação i
+
+    erro = 0.05;
 
     update_progress_bar = false;
 

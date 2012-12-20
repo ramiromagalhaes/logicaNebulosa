@@ -1,14 +1,13 @@
-function [fis erros] = gradientIndependentMFs(dados, nMFs1, nMFs2, progress)
-% Treinamento do sistema nebuloso do caminhão pelo método do gradiente. Ao
+function [fis erros] = gradientIndependentMFs(dados, fis, lambdas, progress)
+% Treinamento do sistema nebuloso do caminhao pelo metodo do gradiente. Ao
 % longo dessa funcao, referenciaremos equacoes da 3a. edicao do livro Fuzzy
 % Logic with Engineering Applications.
 %   Os parametros dessa funcao sao os seguintes:
-%   dados: matriz com a massa de dados que será usada para o treinamento.
-%          A primeira coluna deve conter as entradas referentes à posição;
-%          a segunda coluna deve conter as entradas referentes à direção;
-%          a terceira coluna deve conter as saídas do ângulo de giro do volante.
-%   nMFs1: numero de funcoes de inclusao para o parametro x.
-%   nMFs2: numero de funcoes de inclusao para o parametro direção.
+%   dados: matriz com a massa de dados que sera usada para o treinamento.
+%          A primeira coluna deve conter as entradas referentes a posicao;
+%          a segunda coluna deve conter as entradas referentes a direcao;
+%          a terceira coluna deve conter as saídas do angulo de giro do volante.
+%   lambdas: vetor contendo os valores de lambda para b, centros e sigma.
 %   progress: referencia para uma barra de progresso, para medir o avanco
 %             do algoritmo. Esse argumento e opcional. Note que esta funcao
 %             apenas atualiza a posicao da barra. Cabe ao chamador
@@ -19,19 +18,23 @@ if (nargin >= 4)
     show_progress = true;
 end
 
-nDados = size(dados, 1); %quantidade linhas do parametro dados
+nDados = size(dados, 1); %quantidade linhas tuplas dados para treinamento
 y = dados(:, size(dados, 2)); %coluna de saidas da massa de dados do caminhao = coluna 3
 
-% geracao inicial do FIS treinado pelo metodo do gradiente
-fis = genfis1(dados, [nMFs1 nMFs2], 'gaussmf');
-nEntradas = size(fis.input, 2); %quantidade de variáveis de entrada = 2
-nRegras = size(fis.rule, 2); %quantidade de regras do sistema = nMFs1 * nMFs2
+nEntradas = size(fis.input, 2); %quantidade de variáveis de entrada
+nRegras = size(fis.rule, 2); %quantidade de regras do sistema
 
 %Os lambdas sao parametros que determinam o tamanho do passo que o
 %algoritmo dara ao atualizar um valor.
-lambdaB = .5;
-lambdaC = .5;
-lambdaSigma = .5;
+if (nargin >= 3)
+    lambdaB = lambdas(1);
+    lambdaC = lambdas(2);
+    lambdaSigma = lambdas(3);
+else
+    lambdaB = 1;
+    lambdaC = 1;
+    lambdaSigma = 1;
+end
 
 %Vetor de erros a medida que as iteracoes progridem
 erros = zeros(nDados, 1);
@@ -40,9 +43,8 @@ erros = zeros(nDados, 1);
 sigmaC = mfParamsMatrix(fis);
 
 %Contera as saidas do sistema nebuloso para cada uma de suas regras.
+%O laco inicia a matriz b. Ela sera usada e atualizada no laco principal.
 b = zeros(nRegras, 1);
-
-%Este laco inicia a matriz b. Ela sera usada e atualizada no laco principal.
 for r = 1:nRegras
     b(r) = fis.output.mf(r).params(3);
 end
@@ -76,8 +78,6 @@ for m = 1:nDados
         end
     end
 
-
-
     dividendo = sum(mv); %esse somatorio sera usado varias vezes
 
     %A equacao abaixo e a defuzificacao. Contem os resultados do sistema
@@ -88,11 +88,20 @@ for m = 1:nDados
 
 
 
+    epsilons = zeros(nDados, 1);
+    maisErros = zeros(nDados, 1);
+    for m2 = 1:nDados
+        epsilons(m2) = defuzzify( sigmaC, b, nRegras, nEntradas, dados(m2, 1:2)) - y(m2);
+        maisErros(m2) = 0.5 * epsilons(m2)^2;
+    end
+
+
+
     %Calculo de ε (epsilon), conforme definido pela equacao 7.15 do livro
-    epsilon = defuzz - y(m);
+    epsilon = mean(epsilons);
 
     %Registra o erro atual
-    erros(m) = 0.5 * (epsilon)^2;
+    erros(m) = mean(maisErros);
 
 
 
@@ -152,7 +161,7 @@ function mfParams = mfParamsMatrix(fis)
 %parametrizar as funcoes de inclusao dos argumentos de entrada do sistema
 %nebuloso 'fis'.
 
-    nRegras = size(fis.rule, 2); %quantidade de regras do sistema = nMFs1 * nMFs2
+    nRegras = size(fis.rule, 2); %quantidade de regras do sistema
     nEntradas = size(fis.input, 2); %quantidade de variáveis de entrada
 
     mfParams = zeros(nRegras, nEntradas, 2);
@@ -194,4 +203,34 @@ function fis = fisFromMatrix( sigmaC, b )
         fis = addrule(fis, [r r r 1 1]); %vide http://www.mathworks.com/help/fuzzy/addrule.html
     end
     
+end
+
+function y = defuzzify(sigmaC, b, nRegras, nEntradas, input)
+    %mv(i) contem o resultado da multiplicacao de todas as funcoes de
+    %inclusao pertencentes a i-esima regra, usando como entrada os dados da
+    %iteracao 'm'.
+    mv = ones(nRegras, 1);
+
+    %Esses lacos povoam mv. O calculo apresentado aqui corresponde a
+    %equacao 7.14 do livro. Contudo, note que não precisamos calcular o
+    %resultado de todas as regras com todas as tuplas de dados (conforme o
+    %livro sugere), pois não usaremos isso para nada.
+    for r = 1:nRegras
+        %Esse e o laco da multiplicatoria das funcoes de inclusao presentes
+        %na regra 'r', usando a tupla de dados 'm'.
+        for e = 1:nEntradas
+            %Obtendo os parametros da funcao de inclusao que vamos incluir
+            %na multiplicatoria.
+            params = sigmaC(r, e, :);
+
+            %Chamando a funcao de inclusao e incluindo na multiplicatoria
+            mv(r) = mv(r) * gaussmf(input(e), params);
+        end
+    end
+
+    %A equacao abaixo e a defuzificacao. Contem os resultados do sistema
+    %nebuloso com a entrada m. Vide a equacao 7.3 do livro (pag 214).
+    %Note que a reproducao da equacao 7.3 na pagina 224 esta incorreta,
+    %pois a multiplicatoria do divisor vai de j = 1 a n, ao inves de R.
+    y = sum(mv .* b) / sum(mv);
 end
