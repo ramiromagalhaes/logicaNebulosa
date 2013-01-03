@@ -1,4 +1,4 @@
-function [fis erros] = gradientIndependentMFs(dados, fis, lambdas, progress)
+function [fis erros] = gradientIndependentMFsVersao2(dados, fis, lambdas, progress)
 % Treinamento do sistema nebuloso do caminhao pelo metodo do gradiente. Ao
 % longo dessa funcao, referenciaremos equacoes da 3a. edicao do livro Fuzzy
 % Logic with Engineering Applications.
