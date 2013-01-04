@@ -35,7 +35,7 @@ Se precisar fazer simulações específicas com outros parâmetros ou sistemas n
 
 # Referências
 
-Os relatórios detalhados sobre os experimentos podem ser encontrados nas seguintes referências:
+Os relatórios detalhados sobre os dois trabalhos feitos sobre este mesmo código-fonte podem ser encontrados nas seguintes referências:
 
 * Relatório do Segundo Trabalho de Lógica Nebulosa: https://docs.google.com/document/d/1UuyMFG5MQJrIryI72-0zRUgXDsCP97XGaSAwr1r_Vk0/edit
 * Relatório do Terceiro Trabalho de Lógica Nebulosa: https://docs.google.com/document/d/1tmEPR88R-FLX_3pBPuuvZsnkH_dLNqiQbHDdLhmwuQI/edit
