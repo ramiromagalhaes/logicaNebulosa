@@ -20,6 +20,8 @@ Se precisar fazer treinamentos diferentes e com outros parâmetros, consulte as 
 
 *Nota:* os descritores dos sistemas nebulosos são arquivos FIS que serão armazenados na pasta 'fis' durante a execução dos treinamento.
 
+*Nota:* o único treinamento que não é automaticamente executado por este método é o 'gradientIndependentMFsVersao2.m'.
+
 # Simulação
 Use a função 'simula' para executar simulações com todos os sistemas nebulosos descritos em arquivos FIS presentes na pasta 'fis'. Note que são mais de 600 simulações que serão executadas. Na nossa experiência o tempo total dispendido na execução de todas as simulações supera 9 horas.
 
@@ -29,3 +31,11 @@ Se precisar fazer simulações específicas com outros parâmetros ou sistemas n
 
 *Nota:* Uma forma conveniente de ler o arquivo de estatísticas é usando a função 'exibeResultado'. Ela recebe como parâmetro o nome do arquivo de estatísticas e apresenta, de forma amigável, os números relevantes contidos no arquivo passado como parâmetro.
 
+*Nota:* a única simulação que não é automaticamente executado por este método é a que usa os resultados do treinamento com o 'gradientIndependentMFsVersao2.m'.
+
+# Referências
+
+Os relatórios detalhados sobre os experimentos podem ser encontrados nas seguintes referências:
+
+* Relatório do Segundo Trabalho de Lógica Nebulosa: https://docs.google.com/document/d/1UuyMFG5MQJrIryI72-0zRUgXDsCP97XGaSAwr1r_Vk0/edit
+* Relatório do Terceiro Trabalho de Lógica Nebulosa: https://docs.google.com/document/d/1tmEPR88R-FLX_3pBPuuvZsnkH_dLNqiQbHDdLhmwuQI/edit
